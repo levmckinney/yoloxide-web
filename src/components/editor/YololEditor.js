@@ -6,12 +6,11 @@ import "brace/theme/solarized_dark";
 
 export default class YololEditor extends React.Component {
   onChange = newValue => {
-    console.log("change", newValue);
   };
 
   render() {
     return (
-      <AceEditor className="mt-0"
+      <AceEditor
         mode="python"
         theme="solarized_dark"
         onChange={this.onChange}
