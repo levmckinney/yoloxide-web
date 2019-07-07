@@ -1,22 +1,24 @@
 import { createReducer } from "redux-starter-kit";
+import {DATA_FIELD_ACTIONS, DEVICE_ACTIONS} from '../actions'
+import dataFields from './dataFields'
+import {callInnerReducer} from './utils'
 import uuid from 'uuid';
 
 const devices = createReducer({}, {
-  ADD_DEVICE: (devices, action) => {
+  [DEVICE_ACTIONS.ADD_DEVICE]: (devices, action) => {
     let defaultDevice = {
       id:uuid.v4(),
       name:"new device",
-      dataFields:[],
+      dataFields:{},
       isChip:false
     }
-    console.log("action.device", action.device)
     let device = {...defaultDevice, ...(action.device || {})}
-    console.log("final device", device)
     devices[device.id] = device
   },
-  SET_DEVICE: (devices, action) => {
+  [DEVICE_ACTIONS.SET_DEVICE]: (devices, action) => {
     devices[action.device.id] = {...devices[action.device.id], ...action.device}
-  }
+  },
+  ...callInnerReducer(dataFields, 'deviceId', 'dataFields', DATA_FIELD_ACTIONS)
 })
 
 

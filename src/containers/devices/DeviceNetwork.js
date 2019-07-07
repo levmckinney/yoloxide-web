@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { addDevice } from '../../actions'
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state.networks[ownProps.networkId])
   return  {
     network:state.networks[ownProps.networkId]
   }

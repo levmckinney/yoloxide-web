@@ -1,8 +1,9 @@
+export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD'}
+
+export const DEVICE_ACTIONS = {ADD_DEVICE:'ADD_DEVICE', SET_DEVICE:'SET_DEVICE', ...DATA_FIELD_ACTIONS}
+
 export const NETWORK_ACTIONS = {ADD_NETWORK:'ADD_NETWORK', SET_NETWORK:'SET_NETWORK'}
 
-export const DEVICE_ACTIONS = {ADD_DEVICE:'ADD_DEVICE', SET_DEVICE:'SET_DEVICE'}
-
-export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD'}
 
 export const setNetwork = network => {
   return {
@@ -34,3 +35,31 @@ export const addNetwork = network => {
   }
 };
 
+export const addField = (networkId, deviceId, dataField) => {
+  console.log("ran action", networkId, deviceId, dataField)
+  return {
+    type:DATA_FIELD_ACTIONS.ADD_FIELD,
+    networkId,
+    deviceId,
+    dataField
+  }
+}
+
+
+export const setField = (networkId, deviceId, dataField) => {
+  return {
+    type:DATA_FIELD_ACTIONS.SET_FIELD,
+    networkId,
+    deviceId,
+    dataField
+  }
+}
+
+export const removeField = (networkId, deviceId, name) =>{
+  return {
+    type:DATA_FIELD_ACTIONS.REMOVE_FIELD,
+    networkId,
+    deviceId,
+    name
+  }
+}

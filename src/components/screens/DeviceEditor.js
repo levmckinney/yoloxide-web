@@ -1,5 +1,6 @@
 import React from 'react'
 import YololEditor from '../editor/YololEditor'
+import DataFieldsEditor from '../../containers/editor/DataFieldsEditor'
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import ClickToEdit from '../util/ClickToEdit'
@@ -11,6 +12,9 @@ const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {
       <ClickToEdit initValue={deviceName} onChange={event => setDeviceName(event.target.value)}/>
       <Col>
         <YololEditor networkId={networkId} deviceId={deviceId}/>
+      </Col>
+      <Col>
+        <DataFieldsEditor deviceId={deviceId} networkId={networkId}/>
       </Col>
     </Container>
   )

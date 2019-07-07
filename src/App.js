@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Welcome from "./components/screens/Welcome";
 import DeviceEditor from "./containers/screens/DeviceEditor";
-import RunnerBar from "./components/RunnerBar";
+import RunnerBar from "./components/runnerbars/RunnerBar";
 import Networks from "./containers/screens/Networks";
 
 

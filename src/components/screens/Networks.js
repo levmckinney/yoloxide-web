@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import  DeviceNetwork from '../../containers/devices/DeviceNetwork'
 
 const Networks = ({networkIds}) => {

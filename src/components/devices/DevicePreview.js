@@ -11,9 +11,9 @@ const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}
       <Card key={deviceId} border="secondary">
         <Card.Title>{name}</Card.Title>
         <ListGroup variant="flush">
-          {dataFields.map(dataField => {
+          {Object.values(dataFields).map(dataField => {
             return (
-              <ListGroup.Item key={dataField.id}>
+              <ListGroup.Item key={dataField.name}>
                 {dataField.name}:{dataField.value}
               </ListGroup.Item>
             );

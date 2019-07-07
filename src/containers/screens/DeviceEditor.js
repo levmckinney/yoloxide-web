@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import {setDevice} from '../../actions'
 
 const mapStateToProps = (state, {deviceId, networkId}) => {
-  console.log(state)
   return {
   deviceName:state.networks[networkId].devices[deviceId].name
 }}

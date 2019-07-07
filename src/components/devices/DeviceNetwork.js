@@ -3,7 +3,7 @@ import DevicePreview from "../../containers/devices/DevicePreview";
 import CardGroup from "react-bootstrap/CardGroup";
 import Card from "react-bootstrap/Card";
 import PropTypes from 'prop-types'
-import withRouter from 'react-router-dom/withRouter'
+import { withRouter } from 'react-router-dom'
 import uuid from 'uuid'
 
 const DeviceNetwork = ({network:{devices, id}, addDevice, history}) => {
