@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Welcome from "./components/screens/Welcome";
 import DeviceEditor from "./containers/screens/DeviceEditor";
-import RunnerBar from "./components/runnerbars/RunnerBar";
 import Networks from "./containers/screens/Networks";
 
 
@@ -12,7 +11,6 @@ export default class App extends Component {
       <Router>
         <React.Fragment>
           <div>
-            <RunnerBar/>
             <Switch>
               <Route exact path="/welcome" component={Welcome} />
               <Route exact path="/edit/:networkId/:deviceId" render={

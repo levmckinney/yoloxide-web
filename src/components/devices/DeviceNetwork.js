@@ -19,7 +19,7 @@ const DeviceNetwork = ({network:{devices, id}, addDevice, history}) => {
             addDevice({id:deviceId})
             history.push("/edit/" + id + "/" + deviceId)
             }}>
-          <Card.Title className="mx-auto" >Add new card</Card.Title>
+          <Card.Title className="mx-auto" >Add new device</Card.Title>
       </Card>
       </CardGroup>
     );

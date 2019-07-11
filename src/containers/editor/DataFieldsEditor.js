@@ -1,10 +1,12 @@
 import DataFieldsEditor from '../../components/editor/DataFieldsEditor'
 import { connect } from 'react-redux'
 import { addField, removeField} from '../../actions'
+import { getDevice } from '../getters';
 
 const mapStateToProps = (state, ownProps) => {
+  let {networkId, deviceId} = ownProps
   return {
-    dataFields: state.networks[ownProps.networkId].devices[ownProps.deviceId].dataFields
+    dataFields: getDevice(state, networkId, deviceId).dataFields
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

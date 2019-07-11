@@ -2,24 +2,27 @@ import { createReducer } from "redux-starter-kit";
 import {NETWORK_ACTIONS, DEVICE_ACTIONS} from '../actions'
 import devices from './devices'
 import {callInnerReducer} from './utils'
-import uuid from "uuid"
 
 export const initialNetworks = {
   mainNetworkID:{
     id: "mainNetworkID",
     devices: {
-      shipId:{
-        id: "shipId",
-        name: "Ship controller",
-        dataFields: {Heading:{ name: "Heading", value: "Space north"}}
-      },
-      gunControllerId:{
-        id: "gunControllerId",
-        name: "Gun controller",
-        dataFields: {
-          Target:{ name: "Target", value: "Battlestar gellactica", id: uuid.v4() }
-        }
-      }
+      // shipId:{
+      //   id: "shipId",
+      //   name: "Ship controller",
+      //   dataFields: {Heading:{ name: "Heading", value: "Space north"}},
+      //   executing:false,
+      //   code:{codable:false}
+      // },
+      // gunControllerId:{
+      //   id: "gunControllerId",
+      //   name: "Gun controller",
+      //   dataFields: {
+      //     Target:{ name: "Target", value: "Battlestar gellactica"}
+      //   },
+      //   executing:false,
+      //   code:{codable:false}
+      // }
     }
   }
 }

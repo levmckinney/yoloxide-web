@@ -1,8 +1,10 @@
 import DevicePreview from '../../components/devices/DevicePreview'
 import { connect } from 'react-redux'
+import { getDevice } from '../getters';
 
 const mapStateToProps = (state, ownProps) => {
-  return {device:state.networks[ownProps.networkId].devices[ownProps.deviceId]}
+  let {networkId, deviceId} = ownProps
+  return {device:getDevice(state, networkId, deviceId)}
 }
 
 export default connect(
