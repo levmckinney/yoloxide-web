@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import PropTypes from 'prop-types' 
-import executeStepDevice from '../../yolol/executionEngin'
+import executeStepDevice from '../../yolol/executionEngine'
 
 
 export default class DeviceRunner extends Component {

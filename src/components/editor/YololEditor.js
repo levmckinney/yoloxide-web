@@ -7,21 +7,22 @@ import Button from "react-bootstrap/Button";
 
 
 export default class YololEditor extends Component {
-  onChange = (yolol, event) => {
-    this.props.setCode({yolol})
-  }
-  
+
   shouldComponentUpdate() {
     return !this.props.code.codable;
   }
 
   render() {
+    const onChange = (yolol) => {
+      this.props.setCode({yolol})
+    }  
+
     let {code, makeScriptable} = this.props;
     if(code.codable) {
       return (<AceEditor
           mode="python"
           theme="solarized_dark"
-          onChange={this.onChange}
+          onChange={onChange}
           value={code.yolol}
           name="UNIQUE_ID_OF_DIV"
           editorProps={{ $blockScrolling: true }}

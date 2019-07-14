@@ -4,6 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
+import Variable from '../Variable'
 
 
 const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}) => {
@@ -14,7 +15,7 @@ const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}
           {Object.values(dataFields).map(dataField => {
             return (
               <ListGroup.Item key={dataField.name}>
-                {dataField.name}:{dataField.value}
+                <Variable {...dataField}/>
               </ListGroup.Item>
             );
           })}

@@ -3,16 +3,17 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import PropTypes from 'prop-types'
 import AddField from './AddField'
 import Button from 'react-bootstrap/Button';
+import Variable from '../Variable';
 
 const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
   return (
     <React.Fragment>
         <ListGroup>
           {Object.values(dataFields).map(dataField => {
-            let {name, value} = dataField
+            let {name} = dataField
             return (
               <ListGroup.Item key={name}>
-                {name}:{value} {'   '}
+                <Variable {...dataField}/>
                 <Button variant="outline-danger" size="sm" onClick={()=>{removeField(name)}}>Remove</Button>
               </ListGroup.Item>
             );

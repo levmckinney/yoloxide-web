@@ -4,7 +4,7 @@ import { CODE_ACTIONS } from '../actions'
 
 const code = createReducer({}, {
   [CODE_ACTIONS.MAKE_SCRIPTABLE]: (code) => {
-    return  code.codable ? code : {line:0, yolol:"", codable:true}
+    return  code.codable ? code : {line:0, yolol:"", codable:true, localContext:{}}
   },
   [CODE_ACTIONS.SET_CODE]: (code, action) => {
     if(code.codable) {
