@@ -16,9 +16,10 @@ export const validField = (field) => {
 }
 
 const dataFields = createReducer({},{
-  [DATA_FIELD_ACTIONS.ADD_FIELD]: (fields, action) => {
-    let defaultField = {value:"0", type:"number", startValue:"0"}
-    let field = {...defaultField, ...action.dataField}
+  [DATA_FIELD_ACTIONS.ADD_FIELD]: (fields, {dataField}) => {
+    let defaultField = {value:"0", type:"number", startValue:"0", startType:'number'}
+    dataField = {startValue:dataField.value, startType:dataField.type, ...dataField}
+    let field = {...defaultField, ...dataField}
     if(!validField(field)) {
       console.error('Attempted to enter invalid field into state')
       return

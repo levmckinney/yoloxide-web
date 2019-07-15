@@ -13,8 +13,10 @@ export default function stepDevice(device, wasmExecuteLine) {
     }
     return produce(device , (device) => {
       const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
-      variables.forEach(({name, value}) =>{
-        device.dataFields[name].value = value
+      variables.forEach(({name, value, type}) =>{
+        const field = device.dataFields[name]
+        field.value = value
+        field.type = type
       })
       device.code.localContext = newEnv.local_context
       device.code.line = newEnv.next_line

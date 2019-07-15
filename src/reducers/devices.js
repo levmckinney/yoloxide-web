@@ -27,7 +27,9 @@ const devices = createReducer({}, {
       device.code.localContext = {}
     }
     Object.keys(device.dataFields).forEach(name => {
-      device.dataFields[name].value = device.dataFields[name].startValue
+      let dataField = device.dataFields[name]
+      dataField.value = dataField.startValue
+      dataField.type = dataField.startType
     })
     device.executing = true
   },
@@ -38,7 +40,9 @@ const devices = createReducer({}, {
       device.code.localContext = {}
     }
     Object.keys(device.dataFields).forEach(name => {
-      device.dataFields[name].value = device.dataFields[name].startValue
+      let dataField = device.dataFields[name]
+      dataField.value = dataField.startValue
+      dataField.type = dataField.startType
     })
     device.executing = false
   },

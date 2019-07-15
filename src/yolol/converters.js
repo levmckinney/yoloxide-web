@@ -41,9 +41,9 @@ export function contextToVariables(context, exists=undefined) {
     if(!exists || exists.includes(name)) {
       // need to get value inside of type wrapper
       if(data.StringVal !== undefined) {
-         acc.push({name, value: data.StringVal})
+         acc.push({name, value: data.StringVal, type:'string'})
       } else if(data.NumberVal !== undefined){
-        acc.push({name, value: (data.NumberVal/10000).toString()})
+        acc.push({name, value: (data.NumberVal/10000).toString(), type:'number'})
       } else {
         throw Error("Invalid type in context")
       }

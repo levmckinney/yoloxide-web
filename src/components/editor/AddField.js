@@ -17,7 +17,7 @@ export default function AddField({addField}) {
       event.stopPropagation();
       return
     }
-    addField({name:state.fieldName, value:state.fieldValue, startValue:state.fieldValue, type:state.type})
+    addField({name:state.fieldName, value:state.fieldValue, type:state.type})
     setState({...state, validated: true });
   }
   return (
