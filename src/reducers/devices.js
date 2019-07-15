@@ -24,7 +24,7 @@ const devices = createReducer({}, {
   [DEVICE_ACTIONS.START_EXECUTING]: (devices, action) => {
     const device = devices[action.deviceId]
     if(device.code.codable) {
-      device.code.line = 0
+      device.code.line = 1
     }
     Object.keys(device.dataFields).forEach(name => {
       device.dataFields[name].value = device.dataFields[name].startValue
@@ -34,7 +34,7 @@ const devices = createReducer({}, {
   [DEVICE_ACTIONS.STOP_EXECUTING]: (devices, action) => {
     const device = devices[action.deviceId]
     if(device.code.codable) {
-      device.code.line = 0
+      device.code.line = 1
     }
     Object.keys(device.dataFields).forEach(name => {
       device.dataFields[name].value = device.dataFields[name].startValue

@@ -1,21 +1,33 @@
 import produce from 'immer'
-import {wasm_execute_line} from 'yoloxide'
+import {toEngineEnv, getLine, contextToVariables} from './converters'
 
-export default function stepDevice(device) {
+export default function stepDevice(device, wasmExecuteLine) {
   if(device.code.codable) {
-    const enginEnv = translateToEnginEnv(device)
-    let lines = device.code.yolol.split('\n')
-    lines = lines.map(line => line + '\n').filter((line, i, lines) => !(line === '' && i === lines.length - 1))
-    const newEnv = wasm_execute_line(enginEnv, lines[enginEnv.next_line]);
+    const enginEnv = toEngineEnv(device)
+    const line = getLine(device.code.yolol, device.code.line)
+    console.info("Passing into engin: ", {enginEnv, line})
+    const newEnv = wasmExecuteLine(enginEnv, line);
+    console.info("Got back out of engin: ", {newEnv})
     return produce(device , (device) => {
-      Object.entries(newEnv.global_context).forEach(([key, value]) => {
-        const fieldName = key.replace(/^:/g, '')
-        if(fieldName in device.dataFields) {
-          device.dataFields[fieldName].value = value
-        } else {
-          console.error("trying to write to a field that dose not exist")
-        }
-      });
+      // Object.entries(newEnv.global_context).forEach(([key, field]) => {
+      //   const fieldName = key.replace(/^:/g, '')
+      //   if(fieldName in device.dataFields) {
+      //     // need to get value inside of type wrapper
+      //     if(field.StringVal) {
+      //       device.dataFields[fieldName].value = field.StringVal
+      //     } else if(field.NumberVal){
+      //       device.dataFields[fieldName].value = (field.NumberVal/10000).toString()
+      //     } else {
+      //       throw Error("Invalid type in global env variable has no type")
+      //     }
+      //   } else {
+      //     console.error("trying to write to a field that dose not exist")
+      //   }
+      // })
+      const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
+      variables.forEach(({name, value}) =>{
+        device.dataFields[name].value = value
+      })
       device.code.localContext = newEnv.local_context
       device.code.line = newEnv.next_line
     })
@@ -24,18 +36,3 @@ export default function stepDevice(device) {
   }
 }
 
-function translateToEnginEnv(device) {
-  const {name, code:{line, localContext}, dataFields} = device
-
-  let state = {
-    name,
-    next_line:line,
-    error:"",
-    local_context: localContext,
-    global_context: Object.values(dataFields).reduce((acc, {name, value}) => {
-      return acc[':'+name] = value
-    })
-  }
-
-  return state
-}

@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import FormControl from 'react-bootstrap/FormControl'
 import PropTypes from 'prop-types'
 
 const ClickToEdit = ({initValue="", onChange=()=>{}}) => {
@@ -6,11 +7,12 @@ const ClickToEdit = ({initValue="", onChange=()=>{}}) => {
 
   return (
     <React.Fragment>
-      <input type="text"
-      className="form-control"
+      <FormControl
       value={state.value}
       onChange={(event)=>{setState({value:event.target.value}); onChange(event)}}
-      readOnly={state.readOnly}
+      size='lg'
+      style={{outline:'secondary'}}
+      plaintext
       />
     </React.Fragment>
   )

@@ -12,7 +12,7 @@ export default class App extends Component {
         <React.Fragment>
           <div>
             <Switch>
-              <Route exact path="/welcome" component={Welcome} />
+              <Route exact path="/" component={Welcome} />
               <Route exact path="/edit/:networkId/:deviceId" render={
                 ({match:{params:{networkId, deviceId}}}) => 
                   (<DeviceEditor networkId={networkId} deviceId={deviceId}/>)

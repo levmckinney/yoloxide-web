@@ -27,7 +27,6 @@ export default function AddField({addField}) {
     validated={state.validated}
     onSubmit={e => handleSubmit(e)} 
     >
-      <Form.Row> 
         <Form.Group> 
         <FormControl
           required
@@ -37,7 +36,7 @@ export default function AddField({addField}) {
           aria-label="Field's Name"
           aria-describedby="basic-addon2"
         />
-        <Form.Control.Feedback type="invalid">Field names should be alphanumeric</Form.Control.Feedback>
+        <Form.Control.Feedback type="invalid">Field names should be lowercase and alphanumeric</Form.Control.Feedback>
         </Form.Group>
         <Form.Group> 
         <FormControl
@@ -50,7 +49,6 @@ export default function AddField({addField}) {
         />
         <Form.Control.Feedback type="invalid">Not a valid YOLOL number</Form.Control.Feedback>
         </Form.Group>
-      </Form.Row>
       <DropdownButton
           variant="outline-secondary"
           title={state.type}

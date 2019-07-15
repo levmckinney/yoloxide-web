@@ -4,9 +4,10 @@ import DataFieldsEditor from '../../containers/editor/DataFieldsEditor'
 import Container from 'react-bootstrap/Container'
 import ClickToEdit from '../util/ClickToEdit'
 import PropTypes from 'prop-types'
-import DeviceRunner from '../../containers/runnerbars/DeviceRunner';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+import DeviceRunner from '../../containers/runnerbars/DeviceRunner'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import LocalContextPreview from '../../containers/editor/LocalContextPreview'
 
 const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {    
   return (
@@ -20,6 +21,9 @@ const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {
           </Col>
           <Col>
             <DataFieldsEditor deviceId={deviceId} networkId={networkId}/>
+          </Col>
+          <Col>
+            <LocalContextPreview deviceId={deviceId} networkId={networkId}/>
           </Col>
         </Row>
       </Container>

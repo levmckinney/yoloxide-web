@@ -15,13 +15,18 @@ export default class DeviceRunner extends Component {
         interval:200,
         intervalId:null
     };
-}
+  }
+
+  async componentDidMount() {
+    console.log("starting import")
+    this.state.wasm = await import('yoloxide')
+    console.log("Imported wasm, :", this.state.wasm)
+  }
 
   startAutoStepping = () => {
     let intervalId = setInterval(() => {
-      let newDevice = executeStepDevice(this.props.device)
-      this.props.setDevice(newDevice)
-      if(!newDevice.executing) {
+      this.runStep()
+      if(!this.runStep()) {
         this.stop()
       }
     }, 
@@ -45,13 +50,26 @@ export default class DeviceRunner extends Component {
     this.props.stopExecuting()
   }
   step = () => {
-    console.log("step",this.props)
     if(!this.props.device.executing) {
       this.props.startExecuting()
     }
     this.stopAutoStepping()
-    this.props.setDevice(executeStepDevice(this.props.device))
+    // this is a hacky solution until stepping is set up as an action
+    this.runStep({...this.props.device, executing:true})
   }
+
+  runStep = (device=this.props.device) => {
+    const wasmExecuteLine = this.state.wasm.wasm_execute_line
+    if (wasmExecuteLine){
+      
+      this.props.setDevice(executeStepDevice(device, wasmExecuteLine))
+      return device.executing
+    } else {
+      console.warn("Wasm not loaded") 
+      return false
+    }
+  }
+
   render() {
     let {device} = this.props
     let {autoStepping} = this.state

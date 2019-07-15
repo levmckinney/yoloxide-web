@@ -1,25 +1,16 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import Variable from '../Variable'
+import VariableGroup from '../VariableGroupPreview'
 
 
 const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}) => {
     return (
       <Card key={deviceId} border="secondary">
         <Card.Title>{name}</Card.Title>
-        <ListGroup variant="flush">
-          {Object.values(dataFields).map(dataField => {
-            return (
-              <ListGroup.Item key={dataField.name}>
-                <Variable {...dataField}/>
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
+        <VariableGroup variables={Object.values(dataFields)}/>
         <Button variant="primary" onClick={()=>{
           history.push("/edit/" + networkId + "/" + deviceId)
         }}>Edit</Button>
@@ -29,6 +20,7 @@ const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}
 
   DevicePreview.propTypes = {
     networkId: PropTypes.string.isRequired,
+    deleteDevice: PropTypes.func.isRequired,
     deviceId: PropTypes.string.isRequired,
     device: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired

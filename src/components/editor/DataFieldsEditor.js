@@ -3,11 +3,13 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import PropTypes from 'prop-types'
 import AddField from './AddField'
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card'
 import Variable from '../Variable';
 
 const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
   return (
-    <React.Fragment>
+    <Card className="text-center" border="secondary">
+        <Card.Title>Data Fields</Card.Title>
         <ListGroup>
           {Object.values(dataFields).map(dataField => {
             let {name} = dataField
@@ -20,7 +22,7 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
           })}
         </ListGroup>
       <AddField addField={addField}/>
-    </React.Fragment>
+    </Card>
   )
 }
 

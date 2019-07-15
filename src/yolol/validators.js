@@ -1,4 +1,4 @@
-export const fieldNameRegex = /^[a-zA-Z1-9]*$/
+export const fieldNameRegex = /^[a-z_1-9]*$/
 
 export const numberRegex=/(^([0-9]{1,14}(\.[0-9]{1,4})?)$)/
 
