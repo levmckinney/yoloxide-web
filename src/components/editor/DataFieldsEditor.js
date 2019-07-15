@@ -11,7 +11,7 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
     <Card className="text-center" border="secondary">
         <Card.Title>Data Fields</Card.Title>
         <ListGroup>
-          {Object.values(dataFields).map(dataField => {
+          {Object.values(dataFields).sort((a, b)=>(a.name < b.name ? -1 : 1)).map(dataField => {
             let {name} = dataField
             return (
               <ListGroup.Item key={name}>
