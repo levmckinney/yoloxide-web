@@ -40,7 +40,6 @@ export default class DeviceRunner extends Component {
   } 
 
   start  = () => {
-    let { device } = this.props
     this.startAutoStepping()
     this.props.startExecuting()
   }

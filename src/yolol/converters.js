@@ -40,15 +40,15 @@ export function contextToVariables(context, exists=undefined) {
     const name = key.replace(/^:/, '')
     if(!exists || exists.includes(name)) {
       // need to get value inside of type wrapper
-      if(data.StringVal) {
+      if(data.StringVal !== undefined) {
          acc.push({name, value: data.StringVal})
-      } else if(data.NumberVal){
+      } else if(data.NumberVal !== undefined){
         acc.push({name, value: (data.NumberVal/10000).toString()})
       } else {
-        throw Error("Invalid type in global env variable has no type")
+        throw Error("Invalid type in context")
       }
     } else {
-      Error("trying to set something that dose not exist")
+      console.error("Trying to set something that dose not exist")
     }
     return acc
   }, []);

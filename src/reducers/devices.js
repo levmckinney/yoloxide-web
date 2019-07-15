@@ -18,7 +18,6 @@ const devices = createReducer({}, {
     devices[device.id] = device
   },
   [DEVICE_ACTIONS.SET_DEVICE]: (devices, action) => {
-    console.log(action.device)
     devices[action.device.id] = {...devices[action.device.id], ...action.device}
   },
   [DEVICE_ACTIONS.START_EXECUTING]: (devices, action) => {
