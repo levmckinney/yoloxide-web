@@ -18,9 +18,9 @@ export default class DeviceRunner extends Component {
   }
 
   async componentDidMount() {
-    console.log("starting import")
+    console.info("Starting import")
     this.state.wasm = await import('yoloxide')
-    console.log("Imported wasm, :", this.state.wasm)
+    console.info("Imported wasm, :", this.state.wasm)
   }
 
   startAutoStepping = () => {
@@ -41,7 +41,6 @@ export default class DeviceRunner extends Component {
 
   start  = () => {
     let { device } = this.props
-    console.log({device})
     this.startAutoStepping()
     this.props.startExecuting()
   }

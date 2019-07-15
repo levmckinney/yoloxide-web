@@ -41,20 +41,15 @@ export function contextToVariables(context, exists=undefined) {
     if(!exists || exists.includes(name)) {
       // need to get value inside of type wrapper
       if(data.StringVal) {
-        console.log('string')
          acc.push({name, value: data.StringVal})
       } else if(data.NumberVal){
-        console.log('num')
         acc.push({name, value: (data.NumberVal/10000).toString()})
       } else {
-        console.log("Invalid type in global env variable has no type", {exists})
         throw Error("Invalid type in global env variable has no type")
       }
     } else {
-      console.error("trying to set something that dose not exist", {exists})
       Error("trying to set something that dose not exist")
     }
-    console.log(acc)
     return acc
   }, []);
 }

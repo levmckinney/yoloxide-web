@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import {contextToVariables} from '../../yolol/converters'
 
 export default function LocalContextPreview({code:{codable, localContext}, executing}) {
-  console.log("code.codable && executing && code.localeContext", codable , executing , localContext)
   if(codable) {
     return (
       <Card className="text-center" border="secondary">
