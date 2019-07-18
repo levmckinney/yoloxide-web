@@ -18,7 +18,7 @@
     "redux-logger": "^3.0.6",
     "redux-starter-kit": "^0.5.1",
     "uuid": "^3.3.2",
-    "yoloxide": "^0.1.3"
+    "yoloxide": "^0.2.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
