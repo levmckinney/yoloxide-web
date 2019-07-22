@@ -2,6 +2,7 @@ import { createReducer } from "redux-starter-kit";
 import {DATA_FIELD_ACTIONS, DEVICE_ACTIONS, CODE_ACTIONS} from '../actions'
 import dataFields from './dataFields'
 import code from './code'
+import stepDevice from '..//yolol/executionEngine'
 import {callInnerReducer} from './utils'
 import uuid from 'uuid';
 
@@ -45,6 +46,9 @@ const devices = createReducer({}, {
       dataField.type = dataField.startType
     })
     device.executing = false
+  },
+  [DEVICE_ACTIONS.STEP_DEVICE] : (devices, action) => {
+    stepDevice(devices[action.deviceId], action.wasmExecuteLine)
   },
   ...callInnerReducer(dataFields, 'deviceId', 'dataFields', DATA_FIELD_ACTIONS),
   ...callInnerReducer(code, 'deviceId', 'code', CODE_ACTIONS)
