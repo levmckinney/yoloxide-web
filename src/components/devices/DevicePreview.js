@@ -19,9 +19,6 @@ const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}
   }
 
   DevicePreview.propTypes = {
-    networkId: PropTypes.string.isRequired,
-    deleteDevice: PropTypes.func.isRequired,
-    deviceId: PropTypes.string.isRequired,
     device: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }

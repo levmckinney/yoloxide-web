@@ -75,6 +75,4 @@ DeviceRunner.propTypes = {
   step: PropTypes.func.isRequired,
   startExecuting: PropTypes.func.isRequired,
   stopExecuting: PropTypes.func.isRequired,
-  networkId: PropTypes.string.isRequired,
-  deviceId: PropTypes.string.isRequired
 }
