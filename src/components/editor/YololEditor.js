@@ -37,6 +37,4 @@ YololEditor.propTypes = {
   code:PropTypes.object,
   makeScriptable: PropTypes.func.isRequired,
   setCode: PropTypes.func.isRequired,
-  networkId: PropTypes.string.isRequired,
-  deviceId: PropTypes.string.isRequired
 }

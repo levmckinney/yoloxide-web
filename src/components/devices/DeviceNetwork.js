@@ -27,7 +27,6 @@ const DeviceNetwork = ({network:{devices, id}, addDevice, history}) => {
 
 
 DeviceNetwork.propTypes = {
-  networkId: PropTypes.string.isRequired,
   network: PropTypes.object.isRequired,
   addDevice: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired

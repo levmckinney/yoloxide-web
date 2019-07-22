@@ -1,7 +1,8 @@
 import DeviceRunner from '../../components/runnerbars/DeviceRunner'
 import { connect } from 'react-redux'
 import { stepDevice, startExecuting, stopExecuting} from '../../actions'
-import { getDevice } from '../getters';
+import { getDevice } from '../getters'
+import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {
   let {networkId, deviceId} = ownProps
@@ -18,7 +19,15 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(
+const Connected = connect(
   mapStateToProps,
   mapDispatchToProps
 )(DeviceRunner)
+
+Connected.propTypes = {
+  ...Connected.propTypes,
+  networkId: PropTypes.string.isRequired,
+  deviceId: PropTypes.string.isRequired
+}
+
+export default Connected
