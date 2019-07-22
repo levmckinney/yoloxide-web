@@ -5,7 +5,7 @@ export function getLine(string, number) {
   return line ? line : ""
 }
 
-export function toEngineEnv(device) {
+export function deviceToEngineEnv(device) {
   const {name, code:{line, localContext={}}, dataFields} = device
 
   let state = {
