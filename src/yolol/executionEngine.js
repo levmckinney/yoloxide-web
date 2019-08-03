@@ -14,7 +14,7 @@ export async function fetchWasmExecuteLine() {
 
 // Mutates device
 export default function stepDevice(device, wasmExecuteLine, global_context) {
-  if(!device.code.codable){
+  if(!device.code.codable) {
     return
   }
   const enginEnv = deviceToEngineEnv(device)
