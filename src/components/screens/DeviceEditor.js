@@ -8,6 +8,7 @@ import DeviceRunner from '../../containers/runnerbars/DeviceRunner'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import LocalContextPreview from '../../containers/editor/LocalContextPreview'
+import ErrorLog from '../../containers/util/ErrorLog'
 
 const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {    
   return (
@@ -24,6 +25,11 @@ const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {
           </Col>
           <Col>
             <LocalContextPreview deviceId={deviceId} networkId={networkId}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <ErrorLog deviceId={deviceId} networkId={networkId}/>
           </Col>
         </Row>
       </Container>

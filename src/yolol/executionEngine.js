@@ -24,7 +24,7 @@ export default function stepDevice(device, wasmExecuteLine, global_context) {
   const newEnv = wasmExecuteLine(enginEnv, line);
   console.info("Got back out of engin: ", {newEnv})
   if (newEnv.error !== "") {
-    console.warn(newEnv.error)
+    device.code.errors.push(newEnv.error)
   }
   const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
   variables.forEach(({name, value, type}) =>{
