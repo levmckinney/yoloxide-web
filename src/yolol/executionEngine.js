@@ -1,5 +1,5 @@
 import {deviceToEngineEnv, getLine, contextToVariables} from './converters'
-
+import {produce} from 'immer'
 let wasm;
 
 export async function fetchWasmExecuteLine() {
@@ -12,10 +12,9 @@ export async function fetchWasmExecuteLine() {
    return wasm.wasm_execute_line
 }
 
-// Mutates device
 export default function stepDevice(device, wasmExecuteLine, global_context) {
   if(!device.code.codable) {
-    return
+    return device
   }
   const enginEnv = deviceToEngineEnv(device)
   enginEnv.global_context = global_context || enginEnv.global_context
@@ -26,12 +25,15 @@ export default function stepDevice(device, wasmExecuteLine, global_context) {
   if (newEnv.error !== "") {
     device.code.errors.push(newEnv.error)
   }
-  const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
-  variables.forEach(({name, value, type}) =>{
-    const field = device.dataFields[name]
-    field.value = value
-    field.type = type
+  const newDevice = produce(device , (device) => {
+    const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
+    variables.forEach(({name, value, type}) =>{
+      const field = device.dataFields[name]
+      field.value = value
+      field.type = type
+    })
+    device.code.localContext = newEnv.local_context
+    device.code.line = newEnv.next_line
   })
-  device.code.localContext = newEnv.local_context
-  device.code.line = newEnv.next_line
+  return newDevice
 }

@@ -12,7 +12,7 @@ export function deviceToEngineEnv(device) {
     name,
     next_line: line,
     error:"",
-    version:"0.3.1",
+    version:"0.3.2",
     local_context: {...localContext},
     global_context: Object.values(dataFields).reduce((acc, {name, value, type}) => {
       acc[':'+name] = {}

@@ -2,10 +2,11 @@ import DeviceEditor from '../../components/screens/DeviceEditor'
 import { connect } from 'react-redux'
 import {setDevice} from '../../actions'
 import PropTypes from 'prop-types'
+import { getDevice } from '../getters';
 
 const mapStateToProps = (state, {deviceId, networkId}) => {
   return {
-  deviceName:state.networks[networkId].devices[deviceId].name
+  deviceName:getDevice(state, networkId, deviceId).name
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
