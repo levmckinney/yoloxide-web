@@ -1,6 +1,5 @@
-import React, {useState} from "react";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from 'react-bootstrap/Button';
+import React, {useState} from "react"
+import Button from "react-bootstrap/Button"
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import PropTypes from 'prop-types' 
 
@@ -45,24 +44,22 @@ export default function DeviceRunner ({step, startExecuting, stopExecuting, exec
 
   return (
     <ButtonToolbar>
-      <ButtonGroup className="mr-2" style={{background:"dark"}}>
-        {!executing 
-        ? <Button variant="success" onClick={start}>
-            Run
+      {!executing 
+      ? <Button variant="success" onClick={start}>
+          Run
+        </Button>
+      : <Button variant="danger" onClick={stop}>
+          Stop
+        </Button>
+      }
+      {autoStepping || !executing
+        ? <Button variant="secondary" disabled={!executing} onClick={stopAutoStepping}>
+            Pause
           </Button>
-        : <Button variant="danger" onClick={stop}>
-            Stop
+        :  <Button variant="success" onClick={startAutoStepping}>
+            Play
           </Button>
-        }
-        {autoStepping || !executing
-          ? <Button variant="secondary" disabled={!executing} onClick={stopAutoStepping}>
-              Pause
-            </Button>
-          :  <Button variant="success" onClick={startAutoStepping}>
-              Play
-            </Button>
-        }
-      </ButtonGroup>
+      }
       <Button variant="primary" onClick={stepButton}>
         Step
       </Button>
