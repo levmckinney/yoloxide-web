@@ -1,10 +1,10 @@
 import ErrorLog from '../../components/util/ErrorLog'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCode } from '../getters'
+import { getCode, safeGet } from '../getters'
 
 const mapStateToProps = (state, {networkId, deviceId}) => ({
-  errors:getCode(state, networkId, deviceId).errors
+  errors:safeGet(getCode(state, networkId, deviceId), 'errors')
 })
 
 

@@ -1,19 +1,19 @@
 import YololEditor from '../../components/editor/YololEditor'
 import { connect } from 'react-redux'
-import { makeScriptable, setCode} from '../../actions'
-import { getCode } from '../getters'
+import { setCode} from '../../actions'
+import { getCode, getDevice, safeGet} from '../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {
   let {networkId, deviceId} = ownProps;
   return {
+    executing: safeGet(getDevice(state, networkId, deviceId), 'executing'),
     code: getCode(state, networkId, deviceId)
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   let {networkId, deviceId} = ownProps;  
   return {
-    makeScriptable: () => dispatch(makeScriptable(networkId, deviceId)),
     setCode: code => dispatch(setCode(networkId, deviceId, code))
   }
 }

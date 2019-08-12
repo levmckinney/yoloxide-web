@@ -1,4 +1,4 @@
-import { createReducer } from "redux-starter-kit";
+import { createReducer } from "redux-starter-kit"
 import { CODE_ACTIONS } from '../actions'
 
 
