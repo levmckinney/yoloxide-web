@@ -1,0 +1,5 @@
+.executing-line {
+  background-color: coral;
+  position: absolute;
+  opacity: 0.2;
+}

@@ -1,6 +1,6 @@
 {
   "name": "yolol-ide",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
@@ -18,8 +18,9 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-starter-kit": "^0.5.1",
+    "redux-thunk": "^2.3.0",
     "uuid": "^3.3.2",
-    "yoloxide": "^0.2.0"
+    "yoloxide": "^0.3.3"
   },
   "scripts": {
     "start": "react-app-rewired start",
