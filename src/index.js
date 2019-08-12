@@ -1,19 +1,18 @@
+import React from 'react';
+import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom';
-import React from 'react'
+import App from './App';
 import {createStore, applyMiddleware} from 'redux'
 import rootReducer from './reducers'
-import {initialNetworks} from './reducers/networks'
+import {initialNetworks} from './reducers/networks';
 import {createLogger} from 'redux-logger'
-import firebaseConfig from './firebase-config'
-import App from './App'
-import {Provider} from 'react-redux'
-import thunk from 'redux-thunk'
+import firebaseConfig from './firebase-config';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
-import firebase from "firebase/app"
+import firebase from "firebase/app";
 
 // Add the Performance Monitoring library
-import "firebase/performance"
+import "firebase/performance";
 
 
 firebase.initializeApp(firebaseConfig);
@@ -29,7 +28,7 @@ export const initialStore = {
   networks: initialNetworks
 }
 
-const store = createStore(rootReducer, initialStore ,applyMiddleware(logger, thunk));
+const store = createStore(rootReducer, initialStore ,applyMiddleware(logger));
 
 //react
 ReactDOM.render(<Provider store={store}> <App /> </Provider>, document.getElementById('root'));

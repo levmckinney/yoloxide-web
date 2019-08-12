@@ -22,4 +22,6 @@ export default function LocalContextPreview({code:{codable, localContext}, execu
 LocalContextPreview.propTypes = {
   code: PropTypes.object.isRequired,
   executing: PropTypes.bool.isRequired,
+  networkId: PropTypes.string.isRequired,
+  deviceId: PropTypes.string.isRequired
 }

@@ -1,8 +1,7 @@
-import { createReducer } from "redux-starter-kit"
+import { createReducer } from "redux-starter-kit";
 import {DATA_FIELD_ACTIONS, DEVICE_ACTIONS, CODE_ACTIONS} from '../actions'
 import dataFields from './dataFields'
 import code from './code'
-import stepDevice from '..//yolol/executionEngine'
 import {callInnerReducer} from './utils'
 import uuid from 'uuid';
 
@@ -47,12 +46,9 @@ const devices = createReducer({}, {
     })
     device.executing = false
   },
-  [DEVICE_ACTIONS.STEP_DEVICE] : (devices, action) => {
-    const device = JSON.parse(JSON.stringify(devices[action.deviceId])) // can't feed proxy into wasm
-    return {...devices, [device.id]: stepDevice(device, action.wasmExecuteLine)}
-  },
   ...callInnerReducer(dataFields, 'deviceId', 'dataFields', DATA_FIELD_ACTIONS),
   ...callInnerReducer(code, 'deviceId', 'code', CODE_ACTIONS)
 })
+
 
 export default devices;

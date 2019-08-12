@@ -8,9 +8,6 @@ import DeviceRunner from '../../containers/runnerbars/DeviceRunner'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import LocalContextPreview from '../../containers/editor/LocalContextPreview'
-import ShowIfCodable from '../../containers/util/ShowIfCodable'
-import ErrorLog from '../../containers/util/ErrorLog'
-import MakeScriptable from '../../containers/editor/MakeScriptable';
 
 const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {    
   return (
@@ -20,22 +17,13 @@ const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {
         <ClickToEdit initValue={deviceName} onChange={event => setDeviceName(event.target.value)}/>
         <Row>
           <Col>
-            <ShowIfCodable networkId={networkId} deviceId={deviceId} otherwise={<MakeScriptable networkId={networkId} deviceId={deviceId}/>}>
-              <YololEditor networkId={networkId} deviceId={deviceId}/>
-            </ShowIfCodable>
+            <YololEditor networkId={networkId} deviceId={deviceId}/>
           </Col>
           <Col>
             <DataFieldsEditor deviceId={deviceId} networkId={networkId}/>
           </Col>
           <Col>
             <LocalContextPreview deviceId={deviceId} networkId={networkId}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <ShowIfCodable networkId={networkId} deviceId={deviceId}> 
-              <ErrorLog deviceId={deviceId} networkId={networkId}/>
-            </ShowIfCodable>
           </Col>
         </Row>
       </Container>

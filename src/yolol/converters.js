@@ -5,21 +5,20 @@ export function getLine(string, number) {
   return line ? line : ""
 }
 
-export function deviceToEngineEnv(device) {
+export function toEngineEnv(device) {
   const {name, code:{line, localContext={}}, dataFields} = device
 
   let state = {
     name,
     next_line: line,
     error:"",
-    version:"0.3.2",
-    local_context: {...localContext},
+    local_context: localContext,
     global_context: Object.values(dataFields).reduce((acc, {name, value, type}) => {
       acc[':'+name] = {}
       if(type === 'string') {
         acc[':'+name]['StringVal'] = value
       } else if(type === 'number') {
-        acc[':'+name]['NumberVal'] = value
+        acc[':'+name]['NumberVal'] = parseFloat(value) * 10000
       } else {
         throw Error("Invalided type of data field!")
       }
@@ -44,7 +43,7 @@ export function contextToVariables(context, exists=undefined) {
       if(data.StringVal !== undefined) {
          acc.push({name, value: data.StringVal, type:'string'})
       } else if(data.NumberVal !== undefined){
-        acc.push({name, value: data.NumberVal, type:'number'})
+        acc.push({name, value: (data.NumberVal/10000).toString(), type:'number'})
       } else {
         throw Error("Invalid type in context")
       }

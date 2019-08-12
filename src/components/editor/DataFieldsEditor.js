@@ -27,6 +27,8 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
 }
 
 DataFieldsEditor.propTypes = {
+  networkId: PropTypes.string.isRequired,
+  deviceId: PropTypes.string.isRequired,
   dataFields: PropTypes.object.isRequired,
   addField: PropTypes.func.isRequired
 }
