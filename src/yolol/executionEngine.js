@@ -22,10 +22,11 @@ export default function stepDevice(device, wasmExecuteLine, global_context) {
   console.info("Passing into engin: ", {enginEnv, line, wasmExecuteLine})
   const newEnv = wasmExecuteLine(enginEnv, line);
   console.info("Got back out of engin: ", {newEnv})
-  if (newEnv.error !== "") {
-    device.code.errors.push(newEnv.error)
-  }
+  
   const newDevice = produce(device , (device) => {
+    if (newEnv.error !== "") {
+      device.code.errors.push({message: newEnv.error, lineNumber: device.code.line})
+    }
     const variables = contextToVariables(newEnv.global_context, Object.keys(device.dataFields))
     variables.forEach(({name, value, type}) =>{
       const field = device.dataFields[name]

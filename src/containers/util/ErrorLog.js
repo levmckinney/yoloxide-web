@@ -7,7 +7,6 @@ const mapStateToProps = (state, {networkId, deviceId}) => ({
   errors:safeGet(getCode(state, networkId, deviceId), 'errors')
 })
 
-
 const Connected = connect(
   mapStateToProps
 )(ErrorLog)
