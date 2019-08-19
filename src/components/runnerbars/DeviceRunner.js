@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 
 export default function DeviceRunner ({step, startExecuting, stopExecuting, executing}) {
-  const [state, setState] = useState({interval:0.2, autoStepping:false, intervalId:null})
+  const [state, setState] = useState({interval:200, autoStepping:false, intervalId:null})
   const {interval, autoStepping, intervalId} = state
   const startAutoStepping = () => {
     const intervalId = setInterval(() => {
