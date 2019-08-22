@@ -5,7 +5,7 @@ import { getDataFieldsOnDevice, getDevice } from '../../getters';
 
 const mapStateToProps = (state, ownProps) => {
   let {networkId, deviceId} = ownProps
-  return {dataFields:getDataFieldsOnDevice(state, networkId, deviceId), name:getDevice(state, networkId, deviceId)}
+  return {dataFields:getDataFieldsOnDevice(state, networkId, deviceId), name:getDevice(state, networkId, deviceId).name}
 }
 
 const Connected = connect(
