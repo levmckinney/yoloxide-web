@@ -1,11 +1,11 @@
 import DevicePreview from '../../components/devices/DevicePreview'
 import { connect } from 'react-redux'
-import { getDevice } from '../getters'
 import PropTypes from 'prop-types'
+import { getDataFieldsOnDevice, getDevice } from '../../getters';
 
 const mapStateToProps = (state, ownProps) => {
   let {networkId, deviceId} = ownProps
-  return {device:getDevice(state, networkId, deviceId)}
+  return {dataFields:getDataFieldsOnDevice(state, networkId, deviceId), name:getDevice(state, networkId, deviceId)}
 }
 
 const Connected = connect(

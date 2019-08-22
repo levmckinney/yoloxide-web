@@ -17,7 +17,7 @@ export default function AddField({addField}) {
       event.stopPropagation();
       return
     }
-    addField({name:state.fieldName, value:state.fieldValue, type:state.type})
+    addField({id:state.fieldName.toLowerCase(), value:state.fieldValue, type:state.type}, state.fieldName)
     setState({...state, validated: true });
   }
   return (

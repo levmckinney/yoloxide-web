@@ -8,6 +8,8 @@ import firebaseConfig from './firebase-config'
 import App from './App'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
+import { createEpicMiddleware } from 'redux-observable'
+import rootEpic from './epics'
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from "firebase/app"
@@ -15,6 +17,7 @@ import firebase from "firebase/app"
 // Add the Performance Monitoring library
 import "firebase/performance"
 
+const epicMiddleware = createEpicMiddleware()
 
 firebase.initializeApp(firebaseConfig);
 firebase.performance();
@@ -29,8 +32,10 @@ export const initialStore = {
   networks: initialNetworks
 }
 
-const store = createStore(rootReducer, initialStore ,applyMiddleware(logger, thunk));
+const store = createStore(rootReducer, initialStore ,applyMiddleware(logger, thunk, epicMiddleware));
 
-//react
+epicMiddleware.run(rootEpic)
+
+//react 
 ReactDOM.render(<Provider store={store}> <App /> </Provider>, document.getElementById('root'));
 

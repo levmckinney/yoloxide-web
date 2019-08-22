@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import VariableGroup from '../VariableGroupPreview'
 
 
-const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}) => {
+const DevicePreview = ({name, dataFields, deviceId, networkId, history}) => {
     return (
       <Card key={deviceId} border="secondary">
         <Card.Title>{name}</Card.Title>

@@ -1,10 +1,10 @@
 import ShowIfCodable from '../../components/util/ShowIfTrue'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCode } from '../getters'
+import { getCode, safeGet } from '../../getters'
 
 const mapStateToProps = (state, {networkId, deviceId}) => ({
-  bool: getCode(state, networkId, deviceId).codable
+  bool: safeGet(getCode(state, networkId, deviceId), 'codable')
 })
 
 

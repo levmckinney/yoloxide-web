@@ -1,7 +1,7 @@
 import DeviceRunner from '../../components/runnerbars/DeviceRunner'
 import { connect } from 'react-redux'
 import { stepDevice, startExecuting, stopExecuting} from '../../actions'
-import { getDevice } from '../getters'
+import { getDevice } from '../../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {

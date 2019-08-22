@@ -5,8 +5,8 @@ export function getLine(string, number) {
   return line ? line : ""
 }
 
-export function deviceToEngineEnv(device) {
-  const {name, code:{line, localContext={}}, dataFields} = device
+export function createEngineEnv(device, dataFields) {
+  const {name, code:{line, localContext={}}} = device
 
   let state = {
     name,
@@ -14,12 +14,12 @@ export function deviceToEngineEnv(device) {
     error:"",
     version:"0.3.2",
     local_context: {...localContext},
-    global_context: Object.values(dataFields).reduce((acc, {name, value, type}) => {
-      acc[':'+name] = {}
+    global_context: Object.values(dataFields).reduce((acc, {id, value, type}) => {
+      acc[':' + id] = {}
       if(type === 'string') {
-        acc[':'+name]['StringVal'] = value
+        acc[':' + id]['StringVal'] = value
       } else if(type === 'number') {
-        acc[':'+name]['NumberVal'] = value
+        acc[':' + id]['NumberVal'] = value
       } else {
         throw Error("Invalided type of data field!")
       }
@@ -38,18 +38,18 @@ export function deviceToEngineEnv(device) {
 export function contextToVariables(context, exists=undefined) {
   return Object.entries(context).reduce((acc, [key, data]) => {
     // its safe to assume that locale variables will not have this
-    const name = key.replace(/^:/, '')
-    if(!exists || exists.includes(name)) {
+    const id = key.replace(/^:/, '')
+    if(!exists || exists.includes(id)) {
       // need to get value inside of type wrapper
       if(data.StringVal !== undefined) {
-         acc.push({name, value: data.StringVal, type:'string'})
+         acc.push({name:id, id, value: data.StringVal, type:'string'})
       } else if(data.NumberVal !== undefined){
-        acc.push({name, value: data.NumberVal, type:'number'})
+        acc.push({name:id, id, value: data.NumberVal, type:'number'})
       } else {
-        throw Error("Invalid type in context")
+        throw Error(`Invalid type in context for ${key}. The the interpreter has changed what strings it use to represent types! Contact the Devs!`)
       }
     } else {
-      console.error("Trying to set something that dose not exist")
+      throw Error(`Trying to set ${key} that dose not exist in context`)
     }
     return acc
   }, []);
