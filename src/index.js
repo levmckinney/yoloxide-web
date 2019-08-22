@@ -7,7 +7,6 @@ import {createLogger} from 'redux-logger'
 import firebaseConfig from './firebase-config'
 import App from './App'
 import {Provider} from 'react-redux'
-import thunk from 'redux-thunk'
 import { createEpicMiddleware } from 'redux-observable'
 import rootEpic from './epics'
 
@@ -32,7 +31,7 @@ export const initialStore = {
   networks: initialNetworks
 }
 
-const store = createStore(rootReducer, initialStore ,applyMiddleware(logger, thunk, epicMiddleware));
+const store = createStore(rootReducer, initialStore ,applyMiddleware(logger, epicMiddleware));
 
 epicMiddleware.run(rootEpic)
 
