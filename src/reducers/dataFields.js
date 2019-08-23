@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import {DATA_FIELD_ACTIONS} from '../actions';
+import {DATA_FIELD_ACTIONS, DEVICE_ACTIONS} from '../actions';
 import { validNumber } from '../yolol/validators'
 
 export const validField = (field) => {
@@ -15,6 +15,11 @@ export const validField = (field) => {
   return true
 }
 
+export const resetField = (field) => {
+  field.value = field.startValue
+  field.type = field.startType
+}
+
 /**
  * Example structure
  * {
@@ -25,7 +30,7 @@ export const validField = (field) => {
  *    startValue: 12, // the value the dataField resets to when not executing
  *    startType: "number", // the type the data field resets to when not executing
  *    refs: { // a collection representing all of the devices referencing this dataField
- *     TheNameOfTheField: {
+ *     "theIdOfTheDevice": {
  *        mixCaseName: "TheNameOfTheField", // the same as the id but mix case
  *       deviceId: "theIdOfTheDevice" // the device the refers to this data field
  *      }
@@ -90,6 +95,16 @@ const dataFields = createReducer({},{
       }
       fields[field.id] = field
     }
+  },
+  [DEVICE_ACTIONS.START_EXECUTING]: (fields, {deviceId}) => {
+    Object.values(fields)
+      .filter(field => Object.keys(field.refs).includes(deviceId))
+      .forEach(resetField);
+  },
+  [DEVICE_ACTIONS.STOP_EXECUTING]: (fields, {deviceId}) => {
+    Object.values(fields)
+      .filter(field => Object.keys(field.refs).includes(deviceId))
+      .forEach(resetField);  
   },
   [DATA_FIELD_ACTIONS.UNASSIGN_AND_REMOVE_IF_NO_REFS]: (fields, action) => {
     const id = action.dataFieldId,

@@ -19,7 +19,7 @@ import "firebase/performance"
 const epicMiddleware = createEpicMiddleware()
 
 firebase.initializeApp(firebaseConfig);
-firebase.performance();
+export const trace = firebase.performance();
 
 // Setting up redux action logging
 const logger = createLogger({
