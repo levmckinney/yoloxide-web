@@ -113,6 +113,9 @@ const dataFields = createReducer({},{
     if(Object.entries(fields[id].refs).length === 0) {
       delete fields[id]
     }
+  },
+  [DATA_FIELD_ACTIONS.SET_DATA_FIELDS]: (fields, action) => {
+    return {...fields, ...action.dataFields}
   }
 })
 

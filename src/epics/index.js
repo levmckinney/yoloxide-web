@@ -1,5 +1,5 @@
-import {DEVICE_ACTIONS, setDevice, CODE_ACTIONS} from '../actions'
-import {withLatestFrom, map, scan, ignoreElements, throttleTime} from 'rxjs/operators'
+import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS} from '../actions'
+import {withLatestFrom, scan, ignoreElements, throttleTime, mergeMap} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
 import { ofType, combineEpics } from 'redux-observable';
@@ -10,15 +10,16 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
   ofType(DEVICE_ACTIONS.STEP_DEVICE),
   withLatestFrom(from(fetchWasmExecuteLine())),
   withLatestFrom(state$),
-  map(([[action, wasmExecuteLine], state]) => {
+  mergeMap(([[action, wasmExecuteLine], state]) => {
     const device = getDevice(state, action.networkId, action.deviceId),
           dataFields = getDataFields(state, action.networkId)
     console.log('step Device Epic executing', {action, wasmExecuteLine, device, dataFields})
-    const newDevice = stepDevice(device,
+    const [newDevice, newDataFields] = stepDevice(device,
                                  wasmExecuteLine,
                                  dataFields)
-    return setDevice(action.networkId, newDevice)
+    return [setDevice(action.networkId, newDevice), setDataFields(action.networkId, newDataFields)]
   })
+
 )
 
 export const numberOfCharsPerformanceTrace = (action$, state$) => action$.pipe(

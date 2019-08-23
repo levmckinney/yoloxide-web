@@ -1,5 +1,5 @@
 export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD', ASSIGN_ADD_AND_OR_SET:'ASSIGN_AND_SET', 
-                                   UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS'}
+                                   UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS', SET_DATA_FIELDS:'SET_DATA_FIELDS'}
 
 export const CODE_ACTIONS = {MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', SET_CODE:'SET_CODE'}
 
@@ -133,5 +133,13 @@ export const unassignAndRemoveIfNoRefs = (networkId, deviceId, dataFieldId) => {
     networkId,
     deviceId,
     dataFieldId
+  }
+}
+
+export const setDataFields = (networkId, dataFields) => {
+  return {
+    type: DATA_FIELD_ACTIONS.SET_DATA_FIELDS,
+    networkId,
+    dataFields
   }
 }
