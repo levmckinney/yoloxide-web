@@ -1,9 +1,9 @@
-import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS} from '../actions'
+import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS, NETWORK_ACTIONS} from '../actions'
 import {withLatestFrom, scan, ignoreElements, throttleTime, mergeMap} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
 import { ofType, combineEpics } from 'redux-observable';
-import { getDevice, getDataFields, safeGet } from '../getters';
+import { getDevice, getDataFields, safeGet, getNetwork } from '../getters';
 import {trace} from '../'
 
 export const stepDeviceEpic = (action$, state$) => action$.pipe(
@@ -19,7 +19,26 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
                                  dataFields)
     return [setDevice(action.networkId, newDevice), setDataFields(action.networkId, newDataFields)]
   })
+)
 
+export const stepNetworkEpic = (action$, state$) => action$.pipe(
+  ofType(NETWORK_ACTIONS.STEP_NETWORK),
+  withLatestFrom(from(fetchWasmExecuteLine())),
+  withLatestFrom(state$),
+  mergeMap(([[action, wasmExecuteLine], state]) => {
+    const {networkId} = action
+    const devices = Object.keys(safeGet(getNetwork(state, networkId), 'devices'))
+    let newDataFields = getDataFields(state, networkId)
+    const actions = []
+    devices.forEach(device => {
+      let newDevice;
+      [newDevice, newDataFields] = stepDevice(device, wasmExecuteLine, newDataFields)
+      actions.push(setDevice(networkId, newDevice.id))
+    })
+
+    actions.push(setDataFields(networkId, newDataFields))
+    return actions
+  })
 )
 
 export const numberOfCharsPerformanceTrace = (action$, state$) => action$.pipe(
