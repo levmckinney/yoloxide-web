@@ -1,18 +1,31 @@
-export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD', ASSIGN_ADD_AND_OR_SET:'ASSIGN_AND_SET', 
-                                   UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS', SET_DATA_FIELDS:'SET_DATA_FIELDS'}
+export const DATA_FIELD_ACTIONS = {
+  ADD_FIELD:'ADD_FIELD', 
+  SET_FIELD:'SET_FIELD', 
+  REMOVE_FIELD:'REMOVE_FIELD',
+  ASSIGN_ADD_AND_OR_SET:'ASSIGN_AND_SET', 
+  UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS', 
+  SET_DATA_FIELDS:'SET_DATA_FIELDS'
+}
 
 export const CODE_ACTIONS = {MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', SET_CODE:'SET_CODE'}
 
 export const DEVICE_ACTIONS = {
   ADD_DEVICE:'ADD_DEVICE',
   SET_DEVICE:'SET_DEVICE',
+  REMOVE_DEVICE: 'REMOVE_DEVICE',
   START_EXECUTING:'START_EXECUTING',
   STOP_EXECUTING:'STOP_EXECUTING',
   STEP_DEVICE:'STEP_DEVICE',
   ...CODE_ACTIONS
 }
 
-export const NETWORK_ACTIONS = {ADD_NETWORK:'ADD_NETWORK', SET_NETWORK:'SET_NETWORK'}
+export const NETWORK_ACTIONS = {
+  ADD_NETWORK:'ADD_NETWORK', 
+  SET_NETWORK:'SET_NETWORK',
+  STEP_NETWORK:'STEP_NETWORK',
+  START_EXECUTING: 'NETWORKS::START_EXECUTING',
+  STOP_EXECUTING: 'NETWORKS::STOP_EXECUTING'
+}
 
 export const SET_UP_ACTIONS = {SET_WASM_EXECUTE_LINE:'SET_WASM_EXECUTE_LINE'}
 
@@ -32,6 +45,27 @@ export const addNetwork = network => {
   return {
     type: NETWORK_ACTIONS.ADD_NETWORK,
     network
+  }
+}
+
+export const startExecutingNetwork = networkId => {
+ return {
+   type: NETWORK_ACTIONS.START_EXECUTING,
+   networkId
+ }
+}
+
+export const stopExecutingNetwork = networkId => {
+  return {
+    type: NETWORK_ACTIONS.STOP_EXECUTING,
+    networkId
+  }
+}
+
+export const stepNetwork = networkId => {
+  return {
+    type: NETWORK_ACTIONS.STEP_NETWORK,
+    networkId
   }
 }
 
@@ -62,6 +96,14 @@ export const addDevice = (networkId, device) => {
 export const makeScriptable = (networkId, deviceId) => {
   return {
     type:CODE_ACTIONS.MAKE_SCRIPTABLE,
+    networkId,
+    deviceId
+  }
+}
+
+export const removeDevice = (networkId, deviceId) => {
+  return {
+    type: DEVICE_ACTIONS.REMOVE_DEVICE,
     networkId,
     deviceId
   }
