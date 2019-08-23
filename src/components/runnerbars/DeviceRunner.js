@@ -1,72 +1,88 @@
-import React, {useState} from "react"
+import React, {Component} from "react"
 import Button from "react-bootstrap/Button"
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 import PropTypes from 'prop-types' 
 
 
-export default function DeviceRunner ({step, startExecuting, stopExecuting, executing}) {
-  const [state, setState] = useState({interval:200, autoStepping:false, intervalId:null})
-  const {interval, autoStepping, intervalId} = state
-  const startAutoStepping = () => {
-    const intervalId = setInterval(() => {
+export default class DeviceRunner extends Component {
+  constructor() {
+    super()
+    this.state = {interval:200, autoStepping:false}
+  }
+
+  componentWillUnmount = () => {
+    this.stop()
+  }
+
+  stopAutoStepping = () => {
+    this.setState({autoStepping:false})
+    console.log(`Stopping intervalId ${this.intervalId} and state ${JSON.stringify(this.state)}`)
+    clearInterval(this.intervalId)
+  }
+  
+  // utility
+  startAutoStepping = () => {
+    this.intervalId = setInterval(() => {
+      const step = this.props.step
       step()
       if(!step()) {
-        stop()
+        this.stop()
       }
     }, 
-    interval)
-    setState({autoStepping:true, intervalId})
+    this.state.interval)
+    this.setState({autoStepping:true})
   }
 
-  const stepButton = () => {
-    if(autoStepping) {
-      stopAutoStepping()
-    }
-    if(!executing) {
-      startExecuting()
-    }
-    step()
+  stop = () => {
+    this.stopAutoStepping()
+    this.props.stopExecuting()
   }
 
-  const stopAutoStepping = () => {
-    setState({autoStepping:false})
-    clearInterval(intervalId)
+  stepButton = () => {
+    if(this.state.autoStepping) {
+      this.stopAutoStepping()
+    }
+    if(!this.props.executing) {
+      this.props.startExecuting()
+    }
+    this.props.step()
   } 
 
-  const start = () => {
-    startAutoStepping()
-    startExecuting()
-  }
-  const stop = () => {
-    stopAutoStepping()
-    stopExecuting()
+  start = () => {
+    this.startAutoStepping()
+    this.props.startExecuting()
   }
 
-  return (
-    <ButtonToolbar>
-      {!executing 
-      ? <Button variant="success" onClick={start}>
-          Run
-        </Button>
-      : <Button variant="danger" onClick={stop}>
-          Stop
-        </Button>
-      }
-      {autoStepping || !executing
-        ? <Button variant="secondary" disabled={!executing} onClick={stopAutoStepping}>
-            Pause
+  render() {
+    const {executing} = this.props 
+    const {autoStepping} = this.state
+
+    return (
+      <ButtonToolbar>
+        {!executing 
+        ? <Button variant="success" onClick={this.start}>
+            Run
           </Button>
-        :  <Button variant="success" onClick={startAutoStepping}>
-            Play
+        : <Button variant="danger" onClick={this.stop}>
+            Stop
           </Button>
-      }
-      <Button variant="primary" onClick={stepButton}>
-        Step
-      </Button>
-    </ButtonToolbar>
-  )  
+        }
+        {autoStepping || !executing
+          ? <Button variant="secondary" disabled={!executing} onClick={this.stopAutoStepping}>
+              Pause
+            </Button>
+          :  <Button variant="success" onClick={this.startAutoStepping}>
+              Play
+            </Button>
+        }
+        <Button variant="primary" onClick={this.stepButton}>
+          Step
+        </Button>
+      </ButtonToolbar>
+    )  
+  
+  }
 }
-
 
 DeviceRunner.propTypes = {
   step: PropTypes.func.isRequired,

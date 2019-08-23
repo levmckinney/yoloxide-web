@@ -15,7 +15,9 @@ import MakeScriptable from '../../containers/editor/MakeScriptable';
 const DeviceEditor = ({setDeviceName, deviceName, networkId, deviceId}) => {    
   return (
     <React.Fragment>
-      <DeviceRunner networkId={networkId} deviceId={deviceId}/>
+      <ShowIfCodable networkId={networkId} deviceId={deviceId}>
+        <DeviceRunner networkId={networkId} deviceId={deviceId}/>
+      </ShowIfCodable>
       <Container>
         <ClickToEdit initValue={deviceName} onChange={event => setDeviceName(event.target.value)}/>
         <Row>
