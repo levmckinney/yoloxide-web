@@ -22,7 +22,7 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.2",
     "uuid": "^3.3.2",
-    "yoloxide": "^0.3.3"
+    "yoloxide": "^0.4.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
