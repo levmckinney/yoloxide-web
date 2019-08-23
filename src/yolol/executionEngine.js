@@ -1,4 +1,4 @@
-import {createEngineEnv, getLine, contextToVariables} from './converters'
+import {createEngineEnv, getLine, contextToVariables, YololConversionError} from './converters'
 import {produce} from 'immer'
 let wasm;
 
@@ -22,7 +22,7 @@ export default function stepDevice(device, wasmExecuteLine, dataFields) {
   const newEnv = wasmExecuteLine(enginEnv, line);
   console.info("Got back out of engin: ", {newEnv})
   
-  const newDevice = produce(device , (device) => {
+  const [newDevice, newDataFields] = produce([device, dataFields] , ([device, dataFields]) => {
     if (newEnv.error !== "") {
       device.code.errors.push({message: newEnv.error, lineNumber: device.code.line})
     }
@@ -34,10 +34,13 @@ export default function stepDevice(device, wasmExecuteLine, dataFields) {
         field.type = type
       })
     } catch(e) {
-      device.code.errors.push({message:e.message, lineNumber: device.code.line})
+      if(e instanceof YololConversionError) {
+        device.code.errors.push({message:e.message, lineNumber: device.code.line})
+      }
+      throw e
     }
     device.code.localContext = newEnv.local_context
     device.code.line = newEnv.next_line
   })
-  return newDevice
+  return [newDevice, newDataFields]
 }

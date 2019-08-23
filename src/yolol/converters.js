@@ -46,11 +46,13 @@ export function contextToVariables(context, exists=undefined) {
       } else if(data.NumberVal !== undefined){
         acc.push({name:id, id, value: data.NumberVal, type:'number'})
       } else {
-        throw Error(`Invalid type in context for ${key}. The the interpreter has changed what strings it use to represent types! Contact the Devs!`)
+        throw new YololConversionError(`Invalid type in context for ${key}. The the interpreter has changed what strings it use to represent types! Contact the Devs!`)
       }
     } else {
-      throw Error(`Trying to set ${key} that dose not exist in context`)
+      throw new YololConversionError(`Trying to set ${key} that dose not exist in context`)
     }
     return acc
   }, []);
 }
+
+export class YololConversionError extends Error {}

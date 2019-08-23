@@ -12,11 +12,11 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
         <Card.Title>Data Fields</Card.Title>
         <ListGroup>
           {Object.values(dataFields).sort((a, b)=>(a.name < b.name ? -1 : 1)).map((dataField) => {
-            let {dataFieldId} = dataField
+            let {id} = dataField
             return (
               <ListGroup.Item key={dataField.name}>
                 <Variable {...dataField}/>
-                <Button variant="outline-danger" size="sm" onClick={()=>{removeField(dataFieldId)}}>Remove</Button>
+                <Button variant="outline-danger" size="sm" onClick={()=>{removeField(id)}}>Remove</Button>
               </ListGroup.Item>
             );
           })}
