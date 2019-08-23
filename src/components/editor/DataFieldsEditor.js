@@ -16,7 +16,7 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
             return (
               <ListGroup.Item key={dataField.name}>
                 <Variable {...dataField}/>
-                <RemoveButton remove={removeField(id)}/>
+                <RemoveButton remove={() => removeField(id)}/>
               </ListGroup.Item>
             );
           })}
