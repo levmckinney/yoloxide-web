@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import VariableGroup from '../VariableGroupPreview'
+import VariableGroup from '../util/VariableGroupPreview'
 
 
 const DevicePreview = ({name, dataFields, deviceId, networkId, history}) => {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import AddField from './AddField'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
-import Variable from '../Variable';
+import Variable from '../util/Variable';
 
 const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
   return (
