@@ -3,10 +3,10 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
-import VariableGroup from '../VariableGroupPreview'
+import VariableGroup from '../util/VariableGroupPreview'
 
 
-const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}) => {
+const DevicePreview = ({name, dataFields, deviceId, networkId, history}) => {
     return (
       <Card key={deviceId} border="secondary">
         <Card.Title>{name}</Card.Title>
@@ -19,7 +19,8 @@ const DevicePreview = ({device:{name, dataFields}, deviceId, networkId, history}
   }
 
   DevicePreview.propTypes = {
-    device: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired,
+    dataFields: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }
 

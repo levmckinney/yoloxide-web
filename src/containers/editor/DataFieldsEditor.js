@@ -1,18 +1,18 @@
 import DataFieldsEditor from '../../components/editor/DataFieldsEditor'
 import { connect } from 'react-redux'
-import { addField, removeField} from '../../actions'
-import { getDevice } from '../getters'
+import {assignAddAndOrSet, unassignAndRemoveIfNoRefs} from '../../actions'
 import PropTypes from 'prop-types'
+import { getDataFieldsOnDevice } from '../../getters';
 
 const mapStateToProps = (state, ownProps) => {
   let {networkId, deviceId} = ownProps
   return {
-    dataFields: getDevice(state, networkId, deviceId).dataFields
+    dataFields: getDataFieldsOnDevice(state, networkId, deviceId)
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  addField: field => dispatch(addField(ownProps.networkId, ownProps.deviceId, field)),
-  removeField: name => dispatch(removeField(ownProps.networkId, ownProps.deviceId, name))
+  addField: (field, mixCaseName) => dispatch(assignAddAndOrSet(ownProps.networkId, ownProps.deviceId, mixCaseName, field)),
+  removeField: dataFieldId => dispatch(unassignAndRemoveIfNoRefs(ownProps.networkId, ownProps.deviceId, dataFieldId))
 })
 
 const Connected = connect(

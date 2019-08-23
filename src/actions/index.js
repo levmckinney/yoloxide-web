@@ -1,7 +1,5 @@
-import { getDevice } from "../containers/getters";
-import { fetchWasmExecuteLine } from "../yolol/executionEngine";
-
-export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD'}
+export const DATA_FIELD_ACTIONS = {ADD_FIELD:'ADD_FIELD', SET_FIELD:'SET_FIELD', REMOVE_FIELD:'REMOVE_FIELD', ASSIGN_ADD_AND_OR_SET:'ASSIGN_AND_SET', 
+                                   UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS'}
 
 export const CODE_ACTIONS = {MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', SET_CODE:'SET_CODE'}
 
@@ -11,8 +9,7 @@ export const DEVICE_ACTIONS = {
   START_EXECUTING:'START_EXECUTING',
   STOP_EXECUTING:'STOP_EXECUTING',
   STEP_DEVICE:'STEP_DEVICE',
-  ...CODE_ACTIONS,
-  ...DATA_FIELD_ACTIONS
+  ...CODE_ACTIONS
 }
 
 export const NETWORK_ACTIONS = {ADD_NETWORK:'ADD_NETWORK', SET_NETWORK:'SET_NETWORK'}
@@ -29,29 +26,21 @@ export const setNetwork = network => {
     type:NETWORK_ACTIONS.SET_NETWORK,
     network
   }
-};
+}
 
 export const addNetwork = network => {
   return {
     type: NETWORK_ACTIONS.ADD_NETWORK,
     network
   }
-};
+}
 
 export const stepDevice = (networkId, deviceId) => {
-  return (dispatch, getState) => 
-    fetchWasmExecuteLine().then(wasmExecuteLine => {
-      dispatch({
-        type: DEVICE_ACTIONS.STEP_DEVICE,
-        networkId,
-        deviceId,
-        wasmExecuteLine
-      })
-      // return as part of the promise if the device has stopped executing
-      const device = getDevice(getState(), networkId, deviceId)
-      console.log(device)
-      return device && device.executing
-  })
+  return {
+    type: DEVICE_ACTIONS.STEP_DEVICE,
+    networkId,
+    deviceId
+  }
 }
 
 export const setDevice = (networkId, device) => {
@@ -60,7 +49,7 @@ export const setDevice = (networkId, device) => {
     networkId,
     device
   }
-};
+}
 
 export const addDevice = (networkId, device) => {
   return {
@@ -68,7 +57,7 @@ export const addDevice = (networkId, device) => {
     networkId,
     device
   }
-};
+}
 
 export const makeScriptable = (networkId, deviceId) => {
   return {
@@ -76,7 +65,7 @@ export const makeScriptable = (networkId, deviceId) => {
     networkId,
     deviceId
   }
-};
+}
 
 export const startExecuting = (networkId, deviceId) => {
   return {
@@ -103,30 +92,46 @@ export const setCode = (networkId, deviceId, code) => {
   }
 }
 
-export const addField = (networkId, deviceId, dataField) => {
+export const addField = (networkId, dataField) => {
   return {
     type:DATA_FIELD_ACTIONS.ADD_FIELD,
     networkId,
-    deviceId,
     dataField
   }
-};
+}
 
 
-export const setField = (networkId, deviceId, dataField) => {
+export const setField = (networkId, dataField) => {
   return {
     type:DATA_FIELD_ACTIONS.SET_FIELD,
     networkId,
-    deviceId,
     dataField
   }
-};
+}
 
-export const removeField = (networkId, deviceId, name) =>{
+export const removeField = (networkId, name) =>{
   return {
     type:DATA_FIELD_ACTIONS.REMOVE_FIELD,
     networkId,
-    deviceId,
     name
   }
-};
+}
+
+export const assignAddAndOrSet = (networkId, deviceId, mixCaseName, dataField={}) => {
+  return {
+    type:DATA_FIELD_ACTIONS.ASSIGN_ADD_AND_OR_SET,
+    networkId,
+    deviceId,
+    mixCaseName,
+    dataField
+  }
+}
+
+export const unassignAndRemoveIfNoRefs = (networkId, deviceId, dataFieldId) => {
+  return {
+    type: DATA_FIELD_ACTIONS.UNASSIGN_AND_REMOVE_IF_NO_REFS,
+    networkId,
+    deviceId,
+    dataFieldId
+  }
+}

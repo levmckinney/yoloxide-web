@@ -1,6 +1,6 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card'
-import VariableGroup from '../VariableGroupPreview'
+import VariableGroup from '../util/VariableGroupPreview'
 import PropTypes from 'prop-types'
 import {contextToVariables} from '../../yolol/converters'
 

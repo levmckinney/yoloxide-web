@@ -1,7 +1,7 @@
 import YololEditor from '../../components/editor/YololEditor'
 import { connect } from 'react-redux'
 import { setCode} from '../../actions'
-import { getCode, getDevice, safeGet} from '../getters'
+import { getCode, getDevice, safeGet} from '../../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {

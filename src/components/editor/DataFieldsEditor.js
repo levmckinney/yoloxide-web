@@ -4,19 +4,19 @@ import PropTypes from 'prop-types'
 import AddField from './AddField'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
-import Variable from '../Variable';
+import Variable from '../util/Variable';
 
 const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
   return (
     <Card className="text-center" border="secondary">
         <Card.Title>Data Fields</Card.Title>
         <ListGroup>
-          {Object.values(dataFields).sort((a, b)=>(a.name < b.name ? -1 : 1)).map(dataField => {
-            let {name} = dataField
+          {Object.values(dataFields).sort((a, b)=>(a.name < b.name ? -1 : 1)).map((dataField) => {
+            let {dataFieldId} = dataField
             return (
-              <ListGroup.Item key={name}>
+              <ListGroup.Item key={dataField.name}>
                 <Variable {...dataField}/>
-                <Button variant="outline-danger" size="sm" onClick={()=>{removeField(name)}}>Remove</Button>
+                <Button variant="outline-danger" size="sm" onClick={()=>{removeField(dataFieldId)}}>Remove</Button>
               </ListGroup.Item>
             );
           })}
