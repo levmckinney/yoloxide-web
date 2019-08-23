@@ -1,9 +1,10 @@
-import {DEVICE_ACTIONS, setDevice} from '../actions'
-import {withLatestFrom, map} from 'rxjs/operators'
+import {DEVICE_ACTIONS, setDevice, CODE_ACTIONS} from '../actions'
+import {withLatestFrom, map, scan, ignoreElements, throttleTime} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
 import { ofType, combineEpics } from 'redux-observable';
-import { getDevice, getDataFields } from '../getters';
+import { getDevice, getDataFields, safeGet } from '../getters';
+import {trace} from '../'
 
 export const stepDeviceEpic = (action$, state$) => action$.pipe(
   ofType(DEVICE_ACTIONS.STEP_DEVICE),
@@ -20,4 +21,32 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
   })
 )
 
-export default combineEpics(stepDeviceEpic)
+export const numberOfCharsPerformanceTrace = (action$, state$) => action$.pipe(
+  ofType(CODE_ACTIONS.SET_CODE),
+  throttleTime(10000),
+  withLatestFrom(state$),
+  scan((maxNumberOfChars, [, state]) => {
+    let allYolol = ""
+
+    Object.values(state.networks)
+    .map(network => Object.values(safeGet(network, 'devices')))
+    .map(device => safeGet(device, ['code', 'yolol']))
+    .map(yolol => {allYolol += yolol || ""; return yolol})
+
+      let i = allYolol.length,
+          numChars = 0
+    while(i--) {
+      if(allYolol.charAt(i) !== '\n') {
+        numChars++
+      }
+    }
+    if(numChars > maxNumberOfChars) {
+      maxNumberOfChars = numChars
+      trace.incrementMetric('maxCharsInCode', maxNumberOfChars);
+    }
+    return maxNumberOfChars
+  }, 0),
+  ignoreElements()
+)
+
+export default combineEpics(stepDeviceEpic, numberOfCharsPerformanceTrace)
