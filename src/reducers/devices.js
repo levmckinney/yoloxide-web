@@ -3,7 +3,17 @@ import {DEVICE_ACTIONS, CODE_ACTIONS} from '../actions'
 import code from './code'
 import {callInnerReducer} from './utils'
 import uuid from 'uuid';
-
+/**
+ * {
+ *  "asdasda123asda213asadwe":{
+ *    id:"asdasda123asda213asadwe" // the id of the device
+ *    name: "my new device"
+ *    executing: true // if executing
+ *    code: {...} //see code
+ *  }
+ * // ect ...
+ * }
+ */
 const devices = createReducer({}, {
   [DEVICE_ACTIONS.ADD_DEVICE]: (devices, action) => {
     let defaultDevice = {

@@ -6,7 +6,6 @@ export const initialNetworks = {
   mainNetworkID:{
     id: "mainNetworkID",
     devices: {
-
     }
   }
 }

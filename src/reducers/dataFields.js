@@ -15,6 +15,25 @@ export const validField = (field) => {
   return true
 }
 
+/**
+ * Example structure
+ * {
+ *   thenameofthefield: {
+ *    id: thenameofthefield,
+ *    value:" ", // The current value of the item
+ *    type: string, // the type can be either number or string
+ *    startValue: 12, // the value the dataField resets to when not executing
+ *    startType: "number", // the type the data field resets to when not executing
+ *    refs: { // a collection representing all of the devices referencing this dataField
+ *     TheNameOfTheField: {
+ *        mixCaseName: "TheNameOfTheField", // the same as the id but mix case
+ *       deviceId: "theIdOfTheDevice" // the device the refers to this data field
+ *      }
+ *    }
+ *  }
+ *  // ect...
+ * }
+ */
 const dataFields = createReducer({},{
   [DATA_FIELD_ACTIONS.ADD_FIELD]: (fields, {dataField}) => {
     let defaultField = {value:"0", type:"number", startValue:"0", startType:'number', refs:{}}
