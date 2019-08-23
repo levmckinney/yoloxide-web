@@ -1,4 +1,4 @@
-import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS, NETWORK_ACTIONS} from '../actions'
+import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS, NETWORK_ACTIONS, startExecuting, stopExecuting} from '../actions'
 import {withLatestFrom, scan, ignoreElements, throttleTime, mergeMap} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
@@ -21,19 +21,33 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
   })
 )
 
+export const startExecutingNetworkEpic = (action$, state$) => action$.pipe(
+  ofType(NETWORK_ACTIONS.STOP_EXECUTING),
+  withLatestFrom(state$),
+  mergeMap(([action, state]) => Object.keys(safeGet(getNetwork(state, action.networkId), 'devices'))
+                                .map(deviceId => startExecuting(action.networkId, deviceId))
+  ))
+
+export const stopExecutingNetworkEpic = (action$, state$) => action$.pipe(
+  ofType(NETWORK_ACTIONS.STOP_EXECUTING),
+  withLatestFrom(state$),
+  mergeMap(([action, state]) => Object.keys(safeGet(getNetwork(state, action.networkId), 'devices'))
+                                .map(deviceId => stopExecuting(action.networkId, deviceId))
+))
+
 export const stepNetworkEpic = (action$, state$) => action$.pipe(
   ofType(NETWORK_ACTIONS.STEP_NETWORK),
   withLatestFrom(from(fetchWasmExecuteLine())),
   withLatestFrom(state$),
   mergeMap(([[action, wasmExecuteLine], state]) => {
     const {networkId} = action
-    const devices = Object.keys(safeGet(getNetwork(state, networkId), 'devices'))
+    const devices = Object.values(safeGet(getNetwork(state, networkId), 'devices'))
     let newDataFields = getDataFields(state, networkId)
     const actions = []
     devices.forEach(device => {
       let newDevice;
       [newDevice, newDataFields] = stepDevice(device, wasmExecuteLine, newDataFields)
-      actions.push(setDevice(networkId, newDevice.id))
+      actions.push(setDevice(networkId, newDevice))
     })
 
     actions.push(setDataFields(networkId, newDataFields))
@@ -69,4 +83,8 @@ export const numberOfCharsPerformanceTrace = (action$, state$) => action$.pipe(
   ignoreElements()
 )
 
-export default combineEpics(stepDeviceEpic, numberOfCharsPerformanceTrace)
+export default combineEpics(stepDeviceEpic,
+  numberOfCharsPerformanceTrace, 
+  startExecutingNetworkEpic, 
+  stopExecutingNetworkEpic, 
+  stepNetworkEpic)

@@ -21,7 +21,9 @@ export const DEVICE_ACTIONS = {
 export const NETWORK_ACTIONS = {
   ADD_NETWORK:'ADD_NETWORK', 
   SET_NETWORK:'SET_NETWORK',
-  STEP_NETWORK:'STEP_NETWORK'
+  STEP_NETWORK:'STEP_NETWORK',
+  START_EXECUTING: 'NETWORKS::START_EXECUTING',
+  STOP_EXECUTING: 'NETWORKS::STOP_EXECUTING'
 }
 
 export const SET_UP_ACTIONS = {SET_WASM_EXECUTE_LINE:'SET_WASM_EXECUTE_LINE'}
@@ -45,9 +47,23 @@ export const addNetwork = network => {
   }
 }
 
+export const startExecutingNetwork = networkId => {
+ return {
+   type: NETWORK_ACTIONS.START_EXECUTING,
+   networkId
+ }
+}
+
+export const stopExecutingNetwork = networkId => {
+  return {
+    type: NETWORK_ACTIONS.STOP_EXECUTING,
+    networkId
+  }
+}
+
 export const stepNetwork = networkId => {
   return {
-    type: NETWORK_ACTIONS.SET_NETWORK,
+    type: NETWORK_ACTIONS.STEP_NETWORK,
     networkId
   }
 }
