@@ -46,6 +46,9 @@ const devices = createReducer({}, {
     }
     device.executing = false
   },
+  [DEVICE_ACTIONS.REMOVE_DEVICE]: (devices, action) => {
+    delete devices[action.deviceId]
+  },
   ...callInnerReducer(code, 'deviceId', 'code', CODE_ACTIONS)
 })
 

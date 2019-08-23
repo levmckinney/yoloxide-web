@@ -12,6 +12,7 @@ export const CODE_ACTIONS = {MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', SET_CODE:'SET_CO
 export const DEVICE_ACTIONS = {
   ADD_DEVICE:'ADD_DEVICE',
   SET_DEVICE:'SET_DEVICE',
+  REMOVE_DEVICE: 'REMOVE_DEVICE',
   START_EXECUTING:'START_EXECUTING',
   STOP_EXECUTING:'STOP_EXECUTING',
   STEP_DEVICE:'STEP_DEVICE',
@@ -95,6 +96,14 @@ export const addDevice = (networkId, device) => {
 export const makeScriptable = (networkId, deviceId) => {
   return {
     type:CODE_ACTIONS.MAKE_SCRIPTABLE,
+    networkId,
+    deviceId
+  }
+}
+
+export const removeDevice = (networkId, deviceId) => {
+  return {
+    type: DEVICE_ACTIONS.REMOVE_DEVICE,
     networkId,
     deviceId
   }

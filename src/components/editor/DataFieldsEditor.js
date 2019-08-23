@@ -2,9 +2,9 @@ import React from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import PropTypes from 'prop-types'
 import AddField from './AddField'
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card'
 import Variable from '../util/Variable';
+import RemoveButton from '../util/RemoveButton';
 
 const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
   return (
@@ -16,7 +16,7 @@ const DataFieldsEditor = ({ dataFields, addField, removeField}) => {
             return (
               <ListGroup.Item key={dataField.name}>
                 <Variable {...dataField}/>
-                <Button variant="outline-danger" size="sm" onClick={()=>{removeField(id)}}>Remove</Button>
+                <RemoveButton remove={removeField(id)}/>
               </ListGroup.Item>
             );
           })}
