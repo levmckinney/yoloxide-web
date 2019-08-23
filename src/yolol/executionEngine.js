@@ -36,8 +36,9 @@ export default function stepDevice(device, wasmExecuteLine, dataFields) {
     } catch(e) {
       if(e instanceof YololConversionError) {
         device.code.errors.push({message:e.message, lineNumber: device.code.line})
+      } else {
+        throw e
       }
-      throw e
     }
     device.code.localContext = newEnv.local_context
     device.code.line = newEnv.next_line
