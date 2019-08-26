@@ -1,6 +1,6 @@
 {
   "name": "yolol-ide",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
