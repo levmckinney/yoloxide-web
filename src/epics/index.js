@@ -1,10 +1,10 @@
-import {DEVICE_ACTIONS, setDevice, setDataFields , CODE_ACTIONS, NETWORK_ACTIONS, startExecuting, stopExecuting} from '../actions'
-import {withLatestFrom, scan, ignoreElements, throttleTime, mergeMap} from 'rxjs/operators'
+import {DEVICE_ACTIONS, setDevice, setDataFields, NETWORK_ACTIONS, startExecuting, stopExecuting} from '../actions'
+import {withLatestFrom, scan, ignoreElements, mergeMap} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
 import { ofType, combineEpics } from 'redux-observable';
-import { getDevice, getDataFields, safeGet, getNetwork } from '../getters';
-import {trace} from '../'
+import { getDevice, getDataFields, safeGet, getNetwork, getCode } from '../getters';
+import {performance} from '../'
 
 export const stepDeviceEpic = (action$, state$) => action$.pipe(
   ofType(DEVICE_ACTIONS.STEP_DEVICE),
@@ -22,7 +22,7 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
 )
 
 export const startExecutingNetworkEpic = (action$, state$) => action$.pipe(
-  ofType(NETWORK_ACTIONS.STOP_EXECUTING),
+  ofType(NETWORK_ACTIONS.START_EXECUTING),
   withLatestFrom(state$),
   mergeMap(([action, state]) => Object.keys(safeGet(getNetwork(state, action.networkId), 'devices'))
                                 .map(deviceId => startExecuting(action.networkId, deviceId))
@@ -55,36 +55,50 @@ export const stepNetworkEpic = (action$, state$) => action$.pipe(
   })
 )
 
-export const numberOfCharsPerformanceTrace = (action$, state$) => action$.pipe(
-  ofType(CODE_ACTIONS.SET_CODE),
-  throttleTime(10000),
+export const traceExecutionEpic = (action$, state$) => action$.pipe(
+  ofType(DEVICE_ACTIONS.START_EXECUTING, DEVICE_ACTIONS.STOP_EXECUTING, DEVICE_ACTIONS.STEP_DEVICE),
   withLatestFrom(state$),
-  scan((maxNumberOfChars, [, state]) => {
-    let allYolol = ""
+  scan((executionTrace, [action, state]) => {
+    switch(action.type) {
+      case(DEVICE_ACTIONS.START_EXECUTING):
+        executionTrace = performance.trace("executionTrace")
 
-    Object.values(state.networks)
-    .map(network => Object.values(safeGet(network, 'devices')))
-    .map(device => safeGet(device, ['code', 'yolol']))
-    .map(yolol => {allYolol += yolol || ""; return yolol})
+        var yolol = safeGet(getCode(state, action.networkId, action.deviceId), 'yolol')
+        if(!yolol) {
+          return 
+        }
+        var i = yolol.length,
+            numChars = 0
 
-      let i = allYolol.length,
-          numChars = 0
-    while(i--) {
-      if(allYolol.charAt(i) !== '\n') {
-        numChars++
-      }
-    }
-    if(numChars > maxNumberOfChars) {
-      maxNumberOfChars = numChars
-      trace.incrementMetric('maxCharsInCode', maxNumberOfChars);
-    }
-    return maxNumberOfChars
-  }, 0),
+        while(i--) {
+          if(yolol.charAt(i) !== '\n') {
+            numChars++
+          }
+        }
+        executionTrace.putMetric("charsOfCode", numChars)
+        executionTrace.putMetric('steps', 0)
+        executionTrace.start()
+        return executionTrace
+      case(DEVICE_ACTIONS.STEP_DEVICE):
+        if(!executionTrace) {
+          return
+        }
+        executionTrace.incrementMetric('steps', 1)
+        return executionTrace
+      case(DEVICE_ACTIONS.STOP_EXECUTING):
+        if(!executionTrace) {
+          return
+        }
+        executionTrace.stop()
+        return executionTrace
+      default:
+        return null
+    }}, null),
   ignoreElements()
 )
 
 export default combineEpics(stepDeviceEpic,
-  numberOfCharsPerformanceTrace, 
+  traceExecutionEpic, 
   startExecutingNetworkEpic, 
   stopExecutingNetworkEpic, 
   stepNetworkEpic)
