@@ -1,6 +1,6 @@
 <h1 align="center">
     <br>
-    <img src="logo/logo.png" hight="250" href="yoloxide.cylon.xyz"></img>
+    <img src="logo/logo.png" height="250" href="yoloxide.cylon.xyz"></img>
     <br>
     yoloxide-web
     <br>
