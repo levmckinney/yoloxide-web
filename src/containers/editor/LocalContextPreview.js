@@ -4,11 +4,12 @@ import { getCode, getDevice } from '../../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {
-  let {networkId, deviceId} = ownProps
+  let {deviceId} = ownProps
   return {
-    code: getCode(state, networkId, deviceId),
-    executing: getDevice(state, networkId, deviceId).executing
-}}
+    code: getCode(state, deviceId),
+    executing: getDevice(state, deviceId).executing
+  }
+}
 
 const Connected = connect(
   mapStateToProps,
@@ -16,7 +17,6 @@ const Connected = connect(
 
 Connected.propTypes = {
   ...Connected.propTypes,
-  networkId: PropTypes.string.isRequired,
   deviceId: PropTypes.string.isRequired
 }
 

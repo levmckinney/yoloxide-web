@@ -5,10 +5,10 @@ import { getDataFieldsOnDevice, getDevice } from '../../getters';
 import { removeDevice } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
-  let {networkId, deviceId} = ownProps
+  let {deviceId} = ownProps
   return {
-    dataFields:getDataFieldsOnDevice(state, networkId, deviceId), 
-    name:getDevice(state, networkId, deviceId).name}
+    dataFields:getDataFieldsOnDevice(state, deviceId), 
+    name:getDevice(state, deviceId).name}
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -24,7 +24,6 @@ const Connected = connect(
 
 Connected.propTypes = {
   ...Connected.propTypes,
-  networkId: PropTypes.string.isRequired,
   deviceId: PropTypes.string.isRequired,
 }
 

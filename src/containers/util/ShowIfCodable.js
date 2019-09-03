@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getCode, safeGet } from '../../getters'
 
-const mapStateToProps = (state, {networkId, deviceId}) => ({
-  bool: safeGet(getCode(state, networkId, deviceId), 'codable')
+const mapStateToProps = (state, {deviceId}) => ({
+  bool: safeGet(getCode(state, deviceId), 'codable')
 })
 
 

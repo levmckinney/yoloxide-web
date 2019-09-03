@@ -1,13 +1,21 @@
 export const DATA_FIELD_ACTIONS = {
   ADD_FIELD:'ADD_FIELD', 
-  SET_FIELD:'SET_FIELD', 
+  SET_FIELD_VALUE:'SET_FIELD_VALUE',
+  RESET:'DATA_FIELD::RESET',
   REMOVE_FIELD:'REMOVE_FIELD',
-  ASSIGN_ADD_AND_OR_SET:'ASSIGN_AND_SET', 
+  ASSIGN_ADD_AND_OR_SET:'ASSIGN_ADD_AND_OR_SET',
   UNASSIGN_AND_REMOVE_IF_NO_REFS:'UNASSIGN_AND_REMOVE_IF_NO_REFS', 
-  SET_DATA_FIELDS:'SET_DATA_FIELDS'
 }
 
-export const CODE_ACTIONS = {MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', SET_CODE:'SET_CODE'}
+export const CODE_ACTIONS = {
+  MAKE_SCRIPTABLE:'MAKE_SCRIPTABLE', 
+  SET_CODE:'SET_CODE'
+}
+
+export const DATA_FIELD_DEVICE_ACTIONS = {
+  ASSIGN_DEVICE_TO_DATA_FIELD:'DATA_FIELD_DEVICE_ACTIONS::ASSIGN_DATA_FIELD_TO_DEVICE',
+  UNASSIGN_DEVICE_TO_DATA_FIELD: 'DATA_FIELD_DEVICE_ACTIONS::UNASSIGN_DATA_FIELD_TO_DEVICE'
+}
 
 export const DEVICE_ACTIONS = {
   ADD_DEVICE:'ADD_DEVICE',
@@ -109,6 +117,23 @@ export const removeDevice = (networkId, deviceId) => {
   }
 }
 
+export const unassingDataFieldFromDevice = (deviceId, dataFieldId) => {
+  return {
+    type: DATA_FIELD_DEVICE_ACTIONS.UNASSIGN_DEVICE_TO_DATA_FIELD,
+    deviceId,
+    dataFieldId
+  }
+}
+
+export const assignFieldToDevice = (deviceId, dataFieldId, mixCaseName) => {
+  return {
+    type: DATA_FIELD_DEVICE_ACTIONS.ASSIGN_DEVICE_TO_DATA_FIELD,
+    mixCaseName,
+    deviceId,
+    dataFieldId
+  }
+}
+
 export const startExecuting = (networkId, deviceId) => {
   return {
     type:DEVICE_ACTIONS.START_EXECUTING,
@@ -137,25 +162,30 @@ export const setCode = (networkId, deviceId, code) => {
 export const addField = (networkId, dataField) => {
   return {
     type:DATA_FIELD_ACTIONS.ADD_FIELD,
-    networkId,
-    dataField
+    dataField,
+    networkId
   }
 }
 
 
-export const setField = (networkId, dataField) => {
+export const setField = (dataField) => {
   return {
-    type:DATA_FIELD_ACTIONS.SET_FIELD,
-    networkId,
+    type:DATA_FIELD_ACTIONS.SET_FIELD_VALUE,
     dataField
   }
 }
 
-export const removeField = (networkId, name) =>{
+export const resetFields = (dataFieldIds) => {
+  return {
+    type: DATA_FIELD_ACTIONS.RESET,
+    dataFieldIds
+  }
+}
+
+export const removeField = (dataFieldId) =>{
   return {
     type:DATA_FIELD_ACTIONS.REMOVE_FIELD,
-    networkId,
-    name
+    dataFieldId
   }
 }
 
@@ -166,22 +196,5 @@ export const assignAddAndOrSet = (networkId, deviceId, mixCaseName, dataField={}
     deviceId,
     mixCaseName,
     dataField
-  }
-}
-
-export const unassignAndRemoveIfNoRefs = (networkId, deviceId, dataFieldId) => {
-  return {
-    type: DATA_FIELD_ACTIONS.UNASSIGN_AND_REMOVE_IF_NO_REFS,
-    networkId,
-    deviceId,
-    dataFieldId
-  }
-}
-
-export const setDataFields = (networkId, dataFields) => {
-  return {
-    type: DATA_FIELD_ACTIONS.SET_DATA_FIELDS,
-    networkId,
-    dataFields
   }
 }

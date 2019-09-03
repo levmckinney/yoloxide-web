@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getCode, safeGet } from '../../getters'
 
-const mapStateToProps = (state, {networkId, deviceId}) => ({
-  errors:safeGet(getCode(state, networkId, deviceId), 'errors')
+const mapStateToProps = (state, {deviceId}) => ({
+  errors:safeGet(getCode(state, deviceId), 'errors')
 })
 
 const Connected = connect(

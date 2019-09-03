@@ -1,9 +1,9 @@
-import {DEVICE_ACTIONS, setDevice, setDataFields, NETWORK_ACTIONS, startExecuting, stopExecuting} from '../actions'
-import {withLatestFrom, scan, ignoreElements, mergeMap} from 'rxjs/operators'
+import {DEVICE_ACTIONS, setDevice, NETWORK_ACTIONS, resetFields, removeField, DATA_FIELD_ACTIONS, assignFieldToDevice, addField, setField} from '../actions'
+import {withLatestFrom, scan, ignoreElements, mergeMap, map} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
 import { ofType, combineEpics } from 'redux-observable';
-import { getDevice, getDataFields, safeGet, getNetwork, getCode } from '../getters';
+import { getDevice, getDataFieldsOnNetwork, safeGet, getNetwork, getCode, getDevicesOnNetworks } from '../getters';
 import {performance} from '../'
 
 export const stepDeviceEpic = (action$, state$) => action$.pipe(
@@ -11,29 +11,14 @@ export const stepDeviceEpic = (action$, state$) => action$.pipe(
   withLatestFrom(from(fetchWasmExecuteLine())),
   withLatestFrom(state$),
   mergeMap(([[action, wasmExecuteLine], state]) => {
-    const device = getDevice(state, action.networkId, action.deviceId),
-          dataFields = getDataFields(state, action.networkId)
-    console.log('step Device Epic executing', {action, wasmExecuteLine, device, dataFields})
+    const device = getDevice(state, action.deviceId),
+          dataFields = getDataFieldsOnNetwork(state, action.networkId)
     const [newDevice, newDataFields] = stepDevice(device,
                                  wasmExecuteLine,
                                  dataFields)
-    return [setDevice(action.networkId, newDevice), setDataFields(action.networkId, newDataFields)]
+    return [setDevice(action.networkId, newDevice), ...Object.values(newDataFields).map(field => setField(field))]
   })
 )
-
-export const startExecutingNetworkEpic = (action$, state$) => action$.pipe(
-  ofType(NETWORK_ACTIONS.START_EXECUTING),
-  withLatestFrom(state$),
-  mergeMap(([action, state]) => Object.keys(safeGet(getNetwork(state, action.networkId), 'devices'))
-                                .map(deviceId => startExecuting(action.networkId, deviceId))
-  ))
-
-export const stopExecutingNetworkEpic = (action$, state$) => action$.pipe(
-  ofType(NETWORK_ACTIONS.STOP_EXECUTING),
-  withLatestFrom(state$),
-  mergeMap(([action, state]) => Object.keys(safeGet(getNetwork(state, action.networkId), 'devices'))
-                                .map(deviceId => stopExecuting(action.networkId, deviceId))
-))
 
 export const stepNetworkEpic = (action$, state$) => action$.pipe(
   ofType(NETWORK_ACTIONS.STEP_NETWORK),
@@ -41,16 +26,18 @@ export const stepNetworkEpic = (action$, state$) => action$.pipe(
   withLatestFrom(state$),
   mergeMap(([[action, wasmExecuteLine], state]) => {
     const {networkId} = action
-    const devices = Object.values(safeGet(getNetwork(state, networkId), 'devices'))
-    let newDataFields = getDataFields(state, networkId)
+    const devices = getDevicesOnNetworks(state, networkId)
+    let newDataFields = getDataFieldsOnNetwork(state, networkId)
     const actions = []
     devices.forEach(device => {
       let newDevice;
+      console.log("Begins device step", {device, wasmExecuteLine, newDataFields});
       [newDevice, newDataFields] = stepDevice(device, wasmExecuteLine, newDataFields)
+      console.log("Stepping device", {newDataFields, newDevice})
       actions.push(setDevice(networkId, newDevice))
     })
 
-    actions.push(setDataFields(networkId, newDataFields))
+    actions.push(...Object.values(newDataFields).map(field => setField(field)))
     return actions
   })
 )
@@ -63,7 +50,7 @@ export const traceExecutionEpic = (action$, state$) => action$.pipe(
       case(DEVICE_ACTIONS.START_EXECUTING):
         executionTrace = performance.trace("executionTrace")
 
-        var yolol = safeGet(getCode(state, action.networkId, action.deviceId), 'yolol')
+        var yolol = safeGet(getCode(state, action.deviceId), 'yolol')
         if(!yolol) {
           return 
         }
@@ -90,15 +77,47 @@ export const traceExecutionEpic = (action$, state$) => action$.pipe(
           return
         }
         executionTrace.stop()
-        return executionTrace
+        return null
       default:
         return null
     }}, null),
   ignoreElements()
 )
 
-export default combineEpics(stepDeviceEpic,
+export const resetDataFieldsOnExecStartOrStop = ($action, $state) => $action.pipe(
+  ofType(DEVICE_ACTIONS.START_EXECUTING, DEVICE_ACTIONS.STOP_EXECUTING,
+     NETWORK_ACTIONS.STOP_EXECUTING, NETWORK_ACTIONS.START_EXECUTING),
+  withLatestFrom($state),
+  map(([action, state]) => resetFields(getNetwork(state, action.networkId).dataFields))
+)
+
+export const removeUnusedDataFields = ($action, $state) => $action.pipe(
+  ofType(DEVICE_ACTIONS.UNASSIGN_DATA_FIELD, DEVICE_ACTIONS.REMOVE_DEVICE),
+  withLatestFrom($state),
+  mergeMap(([, {dataFields, dataFieldDevice}]) => 
+    Object.values(dataFields)
+      .filter(dataField => !dataFieldDevice.some(value => value.dataFieldId === dataField.id))
+      .map(({id}) => id)
+  ),
+  map(([action]) => removeField(action.dataFieldId))
+)
+
+//TODO optise this so it is not always calling add field.
+export const assignAddAndOrSetDataFieldEpic = ($action, $state) => $action.pipe(
+  ofType(DATA_FIELD_ACTIONS.ASSIGN_ADD_AND_OR_SET),
+  withLatestFrom($state),
+  mergeMap(([action,]) => [
+      addField(action.networkId, action.dataField),
+      assignFieldToDevice(action.deviceId, action.dataField.id, action.mixCaseName)
+    ]
+  )
+)
+
+export default combineEpics(
+  stepDeviceEpic,
   traceExecutionEpic, 
-  startExecutingNetworkEpic, 
-  stopExecutingNetworkEpic, 
-  stepNetworkEpic)
+  stepNetworkEpic,
+  assignAddAndOrSetDataFieldEpic,
+  resetDataFieldsOnExecStartOrStop,
+  removeUnusedDataFields
+)
