@@ -14,7 +14,7 @@ export async function fetchWasmExecuteLine() {
 
 export default function stepDevice(device, wasmExecuteLine, dataFields) {
   if(!device.code.codable) {
-    return device
+    return [device, dataFields]
   }
   const enginEnv = createEngineEnv(device, dataFields)
   const line = getLine(device.code.yolol, device.code.line)

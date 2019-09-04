@@ -24,6 +24,7 @@ export const DEVICE_ACTIONS = {
   START_EXECUTING:'START_EXECUTING',
   STOP_EXECUTING:'STOP_EXECUTING',
   STEP_DEVICE:'STEP_DEVICE',
+  RESET:'DEVICE_ACTIONS::RESET',
   ...CODE_ACTIONS
 }
 
@@ -74,6 +75,13 @@ export const stepNetwork = networkId => {
   return {
     type: NETWORK_ACTIONS.STEP_NETWORK,
     networkId
+  }
+}
+
+export const resetDevices = (deviceIds) => {
+  return {
+    type: DEVICE_ACTIONS.RESET,
+    deviceIds
   }
 }
 

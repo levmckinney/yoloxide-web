@@ -1,4 +1,4 @@
-import {DEVICE_ACTIONS, setDevice, NETWORK_ACTIONS, resetFields, removeField, DATA_FIELD_ACTIONS, assignFieldToDevice, addField, setField} from '../actions'
+import {DEVICE_ACTIONS, setDevice, NETWORK_ACTIONS, resetFields, removeField, DATA_FIELD_ACTIONS, assignFieldToDevice, addField, setField, resetDevices} from '../actions'
 import {withLatestFrom, scan, ignoreElements, mergeMap, map} from 'rxjs/operators'
 import {from} from 'rxjs'
 import stepDevice, { fetchWasmExecuteLine } from '../yolol/executionEngine';
@@ -29,14 +29,11 @@ export const stepNetworkEpic = (action$, state$) => action$.pipe(
     const devices = getDevicesOnNetworks(state, networkId)
     let newDataFields = getDataFieldsOnNetwork(state, networkId)
     const actions = []
-    devices.forEach(device => {
-      let newDevice;
-      console.log("Begins device step", {device, wasmExecuteLine, newDataFields});
+    devices.forEach((device)=> {
+      let newDevice
       [newDevice, newDataFields] = stepDevice(device, wasmExecuteLine, newDataFields)
-      console.log("Stepping device", {newDataFields, newDevice})
       actions.push(setDevice(networkId, newDevice))
     })
-
     actions.push(...Object.values(newDataFields).map(field => setField(field)))
     return actions
   })
@@ -113,11 +110,18 @@ export const assignAddAndOrSetDataFieldEpic = ($action, $state) => $action.pipe(
   )
 )
 
+export const resetDevicesAfterNetworkExecStops = ($action, $state) => $action.pipe(
+  ofType(NETWORK_ACTIONS.STOP_EXECUTING),
+  withLatestFrom($state),
+  map(([action, state]) => resetDevices(getNetwork(state, action.networkId).devices))
+)
+
 export default combineEpics(
   stepDeviceEpic,
   traceExecutionEpic, 
   stepNetworkEpic,
   assignAddAndOrSetDataFieldEpic,
   resetDataFieldsOnExecStartOrStop,
-  removeUnusedDataFields
+  removeUnusedDataFields,
+  resetDevicesAfterNetworkExecStops
 )
