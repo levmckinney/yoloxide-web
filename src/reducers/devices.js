@@ -37,6 +37,14 @@ const devices = createReducer({}, {
     }
     device.executing = true
   },
+  [DEVICE_ACTIONS.RESET]: (devices, action) => {
+    action.deviceIds.map(id => devices[id]).forEach(device => {
+      if(device.code) {
+        device.code.line = 0
+        device.executing = false
+      }
+    })
+  },
   [DEVICE_ACTIONS.STOP_EXECUTING]: (devices, action) => {
     const device = devices[action.deviceId]
     if(device.code.codable) {

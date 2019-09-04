@@ -5,9 +5,9 @@ import { getDevice } from '../../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {
-  let {networkId, deviceId} = ownProps
+  let {deviceId} = ownProps
   return {
-    executing: getDevice(state, networkId, deviceId).executing
+    executing: getDevice(state, deviceId).executing
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => {

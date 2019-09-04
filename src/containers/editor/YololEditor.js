@@ -5,11 +5,12 @@ import { getCode, getDevice, safeGet} from '../../getters'
 import PropTypes from 'prop-types'
 
 const mapStateToProps = (state, ownProps) => {
-  let {networkId, deviceId} = ownProps;
+  let {deviceId} = ownProps;
   return {
-    executing: safeGet(getDevice(state, networkId, deviceId), 'executing'),
-    code: getCode(state, networkId, deviceId)
-}}
+    executing: safeGet(getDevice(state, deviceId), 'executing'),
+    code: getCode(state, deviceId)
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   let {networkId, deviceId} = ownProps;  

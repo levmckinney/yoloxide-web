@@ -14,7 +14,7 @@ export async function fetchWasmExecuteLine() {
 
 export default function stepDevice(device, wasmExecuteLine, dataFields) {
   if(!device.code.codable) {
-    return device
+    return [device, dataFields]
   }
   const enginEnv = createEngineEnv(device, dataFields)
   const line = getLine(device.code.yolol, device.code.line)
@@ -28,6 +28,7 @@ export default function stepDevice(device, wasmExecuteLine, dataFields) {
     }
     try {
       const variables = contextToVariables(newEnv.global_context, Object.values(dataFields).map(dataField => dataField.id))
+      console.log("creating new setting fields ",{variables})
       variables.forEach(({id, value, type}) =>{
         const field = dataFields[id]
         field.value = value

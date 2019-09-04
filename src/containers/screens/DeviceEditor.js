@@ -4,9 +4,9 @@ import {setDevice} from '../../actions'
 import PropTypes from 'prop-types'
 import { getDevice, safeGet } from '../../getters';
 
-const mapStateToProps = (state, {deviceId, networkId}) => {
+const mapStateToProps = (state, {deviceId}) => {
   return {
-  deviceName:safeGet(getDevice(state, networkId, deviceId), 'name')
+  deviceName:safeGet(getDevice(state, deviceId), 'name')
 }}
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

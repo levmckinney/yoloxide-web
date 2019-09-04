@@ -7,14 +7,14 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import uuid from 'uuid'
 
-const DeviceNetwork = ({network:{devices, id, executing}, addDevice, history}) => {
+const DeviceNetwork = ({network:{devices, id}, addDevice, history}) => {
     return (
       <React.Fragment>
         <NetworkRunner networkId={id}/>
         <CardGroup>
-            {Object.values(devices).map(device => {
+            {Object.values(devices).map(deviceId => {
               return (
-                  <DevicePreview key={device.id} deviceId={device.id} networkId={id} />
+                  <DevicePreview key={deviceId} deviceId={deviceId} networkId={id}/>
               );
             })}
         <Card border="primary" onClick={() => {
