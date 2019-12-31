@@ -49,7 +49,7 @@ export function contextToVariables(context, exists=undefined) {
         throw new YololConversionError(`Invalid type in context for ${key}. The the interpreter has changed what strings it use to represent types! Contact the Devs!`)
       }
     } else {
-      throw new YololConversionError(`Trying to set ${key} that dose not exist in context`)
+      throw new YololConversionError(`Trying to set ${key} that does not exist in context`)
     }
     return acc
   }, []);
